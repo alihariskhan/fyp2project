@@ -1,0 +1,156 @@
+{% extends "navbar.html" %}
+{% block body %}
+
+  <!--  Body Wrapper -->
+  <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
+    data-sidebar-position="fixed" data-header-position="fixed">
+    <!-- Sidebar Start -->
+    <aside class="left-sidebar">
+      <!-- Sidebar scroll-->
+      <div>
+        <div class="brand-logo d-flex align-items-center justify-content-between">
+          <a href="./index.html" class="text-nowrap logo-img">
+            <h1 STYLE="font-size:20px; font-weight:900; color:black;">SHAH SECURITY</h1>
+          </a>
+          <div class="close-btn d-xl-none d-block sidebartoggler cursor-pointer" id="sidebarCollapse">
+            <i class="ti ti-x fs-8"></i>
+          </div>
+        </div>
+        <!-- Sidebar navigation-->
+        <nav class="sidebar-nav scroll-sidebar" data-simplebar="">
+          <ul id="sidebarnav">
+            <li class="nav-small-cap">
+              <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+              <span class="hide-menu">Home</span>
+            </li>
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="/" aria-expanded="false">
+                <span>
+                  <i class="ti ti-layout-dashboard"></i>
+                </span>
+                <span class="hide-menu">Website</span>
+              </a>
+            </li>
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="/dash" aria-expanded="false">
+                <span>
+                  <i class="ti ti-layout-dashboard"></i>
+                </span>
+                <span class="hide-menu">Dashboard</span>
+              </a>
+            </li>
+            <li class="nav-small-cap">
+              <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+              <span class="hide-menu">UI COMPONENTS</span>
+            </li>
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="/guard_attendance" aria-expanded="false">
+                <span>
+                  <i class="ti ti-article"></i>
+                </span>
+                <span class="hide-menu">Guard Attendance</span>
+              </a>
+            </li>
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="/guard_registration" aria-expanded="false">
+                <span>
+                  <i class="ti ti-article"></i>
+                </span>
+                <span class="hide-menu">Guard Registration</span>
+              </a>
+            </li>
+              <li class="sidebar-item">
+              <a class="sidebar-link" href="/guard_detail" aria-expanded="false">
+                <span>
+                  <i class="ti ti-article"></i>
+                </span>
+                <span class="hide-menu">Guards Details</span>
+              </a>
+            </li>
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="/guard_schedule" aria-expanded="false">
+                <span>
+                  <i class="ti ti-article"></i>
+                </span>
+                <span class="hide-menu">Guard Schedule</span>
+              </a>
+            </li>
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="/schedule_detail" aria-expanded="false">
+                <span>
+                  <i class="ti ti-article"></i>
+                </span>
+                <span class="hide-menu">Schedule Details</span>
+              </a>
+            </li>
+            <li class="nav-small-cap">
+              <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+              <span class="hide-menu">AUTH</span>
+            </li>
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="./authentication-login.html" aria-expanded="false">
+                <span>
+                  <i class="ti ti-login"></i>
+                </span>
+                <span class="hide-menu">Logout</span>
+              </a>
+            </li>
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="./authentication-register.html" aria-expanded="false">
+                <span>
+                  <i class="ti ti-user-plus"></i>
+                </span>
+                <span class="hide-menu">Register</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
+        <!-- End Sidebar navigation -->
+      </div>
+      <!-- End Sidebar scroll-->
+    </aside>
+    <!--  Sidebar End -->
+    <!--  registration form -->
+    <div class="body-wrapper">
+      <div class="container-fluid">
+        <div class="card">
+          <div class="card-body">
+            <!-- display the guard -->
+            <table>
+              <thead>
+                <tr style="border:1px solid black; ">
+                  <th style="border:1px solid black; padding-left:5px; padding-right:5px;">ID</th>
+                  <th style="border:1px solid black; padding-left:5px; padding-right:5px;">Name</th>
+                  <th style="border:1px solid black; padding-left:5px; padding-right:5px;">Gender</th>
+                  <th style="border:1px solid black; padding-left:5px; padding-right:5px;">Phone Number</th>
+                  <th style="border:1px solid black; padding-left:5px; padding-right:5px;">Address</th>
+                  <th style="border:1px solid black; padding-left:5px; padding-right:5px;">CNIC</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for guard in data %}
+                <tr style="border:1px solid black; ">
+                  <td style="border:1px solid black; padding-left:5px; padding-right:5px;">{{ guard.guard_id }}</td>
+                  <td style="border:1px solid black; padding-left:5px; padding-right:5px;">{{ guard.guard_name }}</td>
+                  <td style="border:1px solid black; padding-left:5px; padding-right:5px;">{{ guard.guard_gender }}</td>
+                  <td style="border:1px solid black; padding-left:5px; padding-right:5px;">{{ guard.guard_phone_number }}</td>
+                  <td style="border:1px solid black; padding-left:5px; padding-right:5px;">{{ guard.guard_address }}</td>
+                  <td style="border:1px solid black; padding-left:5px; padding-right:5px;">{{ guard.guard_cnic }}</td>
+                    <!-- Add additional columns as needed -->
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="{{ url_for('static', filename='libs/jquery/dist/jquery.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='libs/bootstrap/dist/js/bootstrap.bundle.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/sidebarmenu.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/app.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='libs/simplebar/dist/simplebar.js') }}"></script>
+
+{% endblock %}

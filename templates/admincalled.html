@@ -1,0 +1,64 @@
+{% extends "layout.html" %}
+{% block body %}
+
+<!-- Header Close -->
+
+<div class="main-wrapper ">
+<section class=" bg-2">
+  
+</section>
+<!-- Section Blog start -->
+<section class="section blog">
+<center><h1 style="color: white;">Security <span style="color: yellow;">Company</span></h1></center>
+
+	<div class="container">
+
+    <!-- Add new post button -->
+    
+
+    <a href="/supervisordashboard"><button class="btn btn-small btn-round-full btn-green">Dashboard</button></a>
+    
+    <hr>
+
+    <!-- Table fetching post from database -->
+
+		<table class="table bg-gray table-sm table-hover table-striped table-bordered">
+  <thead>
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">Name</th>
+      <th scope="col">CNIC</th>
+      <th scope="col">Phone No</th>
+      <th scope="col">Email</th>
+      <th scope="col">Date</th>
+      <th scope="col" colspan="2">Operations</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for request in requests %}
+    <tr>
+      
+      <td>{{request.interviewer_id}}</td>
+      <td>{{request.interviewer_name}}</td>
+      <td>{{request.interviewer_cnic}}</td>
+      <td>{{request.interviewer_phone_no}}</td>
+      <td>{{request.interviewer_email}}</td>
+      <td>{{request.date}}</td>
+      
+      <td><div><a href="/setinterviewdate/{{request.interviewer_id}}"><button class="btn btn-small btn-round-full btn-green select-button"><span class="material-icons-sharp">done</span></button></a></div></td>
+      
+      
+    </tr>
+{% endfor %}
+    
+  </tbody>
+</table>
+
+		
+	</div>
+</section>
+<!-- Section Blog End -->
+
+
+
+{% endblock %}

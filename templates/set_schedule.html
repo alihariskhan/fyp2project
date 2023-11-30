@@ -1,0 +1,132 @@
+{% extends "layout.html" %}
+{% block body %}
+<!-- form css -->
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/form_style.css') }}" />
+<br><br><br><br>
+<div class="login-box">
+  <h2>Set Schedule</h2>
+  <form method="post" action="/set_schedule" id="scheduleForm">
+    
+    <label class="text-white" for="guardSelect">Select Guard:</label>
+    <select id="guardSelect" name="guard_id">
+        <option value="" selected>Select an option</option>
+      {% for guard in guards %}
+        <option value="{{guard.guard_id}}">{{guard.guard_id}}.. {{guard.guard_name}}</option>
+        
+        {% endfor %}
+    </select>
+    <br><br>
+    <label class="text-white" for="shiftselect">Select Shift:&nbsp;&nbsp;&nbsp;</label>
+    <select id="shiftSelect" name="shiftselect">
+        <option value="" selected>Select an option</option>
+        <option value="morning">Morning</option>
+        <option value="night">Night</option>
+    </select>
+    <br>
+
+    
+
+    <div >
+      <label class="text-white" for="locationSelect">Select Location:</label>
+    <select id="locationSelect" name="location">
+        <option value="" selected>Select an option</option>
+      {% for location in locations %}
+        <option value="{{location.location}}">{{location.location_id}}.. {{location.location}}</option>
+        
+        {% endfor %}
+    </select>
+    <label class="text-white">OR:</label>
+    </div>
+    <br>
+
+    <div class="user-box">
+      <input type="text" name="manual_location" >
+      <label>Enter Location manually</label>
+    </div>
+
+
+    
+    <div >
+        <label class="text-white">Start Date</label>
+      <input type="date" name="start_date" required="">
+    </div>
+
+    <div >
+        <label class="text-white">End Date</label>
+      <input type="date" name="end_date" required="">
+    </div>
+
+    <div class="text-white">
+        <label class="text-white">Timing:</label><br>
+      From<input type="Time" name="start_time" required="">To<input type="Time" name="end_time" required="">
+    </div><br>
+
+    <div class="user-box">
+      <input type="textarea" name="schedule_details">
+      <label>Schedule Details</label>
+    </div>
+
+    
+
+    <button class="btn btn-small btn-round-full"  type="submit" value="submit" style="padding:10px; background:grey; color:white;">
+      Register
+    </button>
+  </form>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('#scheduleForm').submit(function (event) {
+            // Prevent the default form submission behavior
+            event.preventDefault();
+
+            // Use jQuery to get form data
+            var formData = new FormData(this);
+
+            // Use AJAX to send the form data to the server
+            $.ajax({
+                url: '/set_schedule',
+                type: 'POST',
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function (response) {
+                    // Handle the response here
+                    if (response === 'success') {
+                        alert('Schedule set successfully!');
+                        // Optionally, redirect to another page or perform other actions on success
+
+                        // Reset the form after success
+                        $('#scheduleForm')[0].reset(); 
+                    }else if (response === 'success location manually') {
+                        alert('Manual location Schedule set successfully!');
+                        // Optionally, redirect to another page or perform other actions on success
+
+                        // Reset the form after success
+                        $('#scheduleForm')[0].reset(); 
+
+                    }
+                    else if (response === 'double location') {
+                        alert('Please fill any one location field in form!');
+                        // Optionally, redirect to another page or perform other actions on success
+
+                        // Reset the form after success
+                        $('#scheduleForm')[0].reset(); 
+
+                    }
+                    else if (response === 'exist') {
+                        alert('Guard Schedule already Exist');
+                        // Optionally, redirect to another page or perform other actions on success
+
+                    }
+                     else {
+                        alert('Error setting schedule!');
+                        // Handle the error case
+                    }
+                }
+            });
+        });
+    });
+</script>
+
+{% endblock %}

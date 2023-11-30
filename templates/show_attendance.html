@@ -1,0 +1,75 @@
+{% extends "layout.html" %}
+{% block body %}
+
+<!-- Header Close -->
+
+<div class="main-wrapper ">
+<section class=" bg-2">
+  
+</section>
+<!-- Section Blog start -->
+<section class="section blog">
+<center><h1 style="color: white;">Security <span style="color: yellow;">Company</span></h1></center>
+
+	<div class="container">
+
+    <!-- Add new post button -->
+    
+
+    <a href="/supervisordashboard"><button class="btn btn-small btn-round-full btn-green">Dashboard</button></a>
+    
+    <hr>
+
+    <!-- Table fetching post from database -->
+
+		<h2>Search Attendance</h2>
+    <form id="searchForm" action="/show_attendance" method="post">
+        <label for="guard_id">Guard ID:</label>
+        <select name="guard_id" id="guard_id">
+            {% for guard in guards %}
+                <option value="{{ guard.guard_id }}">{{ guard.guard_id }}..{{ guard.guard_name }}</option>
+            {% endfor %}
+        </select>
+        <br>
+        <label for="start_date">Start Date:</label>
+        <input type="date" name="start_date" required>
+        <br>
+        <label for="end_date">End Date:</label>
+        <input type="date" name="end_date" required>
+        <br>
+        <input type="submit" value="Search">
+    </form>
+
+    <div id="resultContainer">
+      
+      
+    </div>
+
+		
+	</div>
+</section>
+<!-- Section Blog End -->
+
+<script>
+    $(document).ready(function() {
+        $('#searchForm').submit(function(e) {
+            e.preventDefault(); // Prevent the form from submitting traditionally
+
+            $.ajax({
+                type: 'POST',
+                url: '/show_attendance',
+                data: $(this).serialize(),
+                success: function(data) {
+                    $('#resultContainer').html(data);
+                },
+                error: function(xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        });
+    });
+</script>
+
+
+
+{% endblock %}

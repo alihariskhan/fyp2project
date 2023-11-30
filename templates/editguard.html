@@ -1,0 +1,84 @@
+{% extends "layout.html" %}
+{% block body %}
+
+<!-- Header Close -->
+
+<div class="main-wrapper ">
+<section class=" bg-2">
+  
+</section>
+<!-- Section Blog start -->
+<section class="section blog">
+<center><h1 style="color: white;">Security <span style="color: yellow;">Company</span></h1></center>
+
+	<div class="container">
+
+    <!-- Add new post button -->
+    
+
+    <a href="/admindashboard"><button class="btn btn-small btn-round-full btn-green">Dashboard</button></a>
+    
+    <hr>
+
+    <!-- form-->  
+        <form id="contact-form" action="/editguard/{{id}}" method="Post" enctype="multipart/form-data">
+          <div class="form-row">
+            <div class="col-lg-6 col-md-6 col-sm-12">
+              <div class="form-group">
+                <input name="guard_name" type="text" class="form-control" value="{{guard.guard_name}}" required >
+              </div>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-12">
+              <div class="form-group">
+                <input name="guard_cnic" type="text" class="form-control" value="{{guard.guard_cnic}}" required>
+              </div>
+            </div>
+
+              <div class="col-lg-6 col-md-6 col-sm-12">
+              <div class="form-group">
+                <input name="guard_phone" type="text" class="form-control" value="{{guard.guard_phone}}" required>
+              </div>
+            </div>
+
+            <div class="col-lg-6 col-md-6 col-sm-12">
+              <div class="form-group">
+                <input name="email" type="text" class="form-control" value="{{guard.guard_email}}" required>
+              </div>
+            </div>
+
+            <div class="col-lg-6 col-md-6 col-sm-12">
+              <div class="form-group">
+                <input name="date" type="date" class="form-control" value="{{guard.date}}" required>
+              </div>
+            </div>
+
+            <div class="col-lg-6 col-md-6 col-sm-12">
+              <div class="form-group">
+                <input name="experience" type="text" class="form-control" value="{{guard.experience}}" required>
+              </div>
+            </div>
+
+            
+
+
+            
+            
+            
+            <div class="col-lg-12 col-md-12 col-sm-12">
+              <div class="text-center">
+                <button class="btn btn-small btn-round-full btn-green " type="submit">Submit</button>
+              </div>
+            </div>
+            </div>
+          </div>
+          
+        </form>
+
+		
+	</div>
+</section>
+<!-- Section Blog End -->
+
+
+
+{% endblock %}

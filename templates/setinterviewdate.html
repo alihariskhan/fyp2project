@@ -1,0 +1,70 @@
+{% extends "layout.html" %}
+{% block body %}
+<body>
+<div class="main-wrapper ">
+
+
+<!-- form start -->
+<section class="contact-form section">
+  <div class="container">
+    <div class="row justify-content-center">
+      
+
+    <div class="row justify-content-center pb-5">
+      
+
+      <div class="">
+        <center><h1 style="color: white;">Security <span style="color: yellow;">Company</span></h1></center>
+
+        <h1>Enter Interview Date and Time</h1>
+        <hr>
+
+        <a href="/admincalled"><button class="btn btn-small ">Back to List</button></a>
+          <a href="/supervisordashboard"><button class=" btn btn-small">Dashboard</button></a>
+          <hr>
+
+        <!-- form-->
+        
+        <form id="contact-form" action="/setinterviewdate/{{id}}" method="Post">
+          <div class="form-row">
+            <div class="col-lg-6 col-md-6 col-sm-12">
+              <div class="form-group">
+                <input name="date" type="datetime-local" class="form-control" required >
+              </div>
+            </div>
+
+            <div class="form-row">
+            <div class="col-lg-6 col-md-6 col-sm-12">
+              <div class="form-group">
+
+                <input name="remarks" type="textarea" class="form-control" placeholder="Give remarks in another condition">
+              </div>
+            </div>
+            
+
+              
+
+            
+              <div >
+                <button class="btn-small btn-round-full btn-green btn" type="submit">Submit</button>
+                    
+              </div>
+            
+            </div>
+          </div>
+          
+        </form>
+        
+      </div>
+    </div>
+  </div>
+
+  
+  </div>
+
+  
+  </div>
+</section>
+</body>
+</html>
+{% endblock %}

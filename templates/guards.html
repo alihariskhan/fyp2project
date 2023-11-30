@@ -1,0 +1,94 @@
+{% extends "navbar.html" %}
+{% block body %}
+
+  <!-- team section -->
+  <head><style>
+    #floating-button {
+            background: palevioletred;
+            color: #fff;
+            padding: 10px 20px;
+            font-size: 16px;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            cursor: pointer;
+            text-decoration: none; 
+            z-index: 1;
+          }
+    
+  </style></head>
+
+  <section  class="team_section layout_padding">
+    <div class="container">
+      <div class="heading_container heading_center">
+        <h2>
+          Our Guards
+        </h2>
+        <p>
+          Lorem ipsum dolor sit amet, non odio tincidunt ut ante, lorem a euismod suspendisse vel, sed quam nulla mauris
+          iaculis. Erat eget vitae malesuada, tortor tincidunt porta lorem lectus.
+        </p>
+      </div>
+      <a  href="/reservation_details"><button class="btn btn-small btn-round-full" id="floating-button">Finalize Reserve</button></a>
+
+      <div class="row">
+        {% for guard in guards %}
+        <div class="col-md-4 col-sm-6 mx-auto ">
+          
+          <div class="box">
+            <div class="img-box">
+              <img src="{{ url_for('static', filename='img/t1.jpg') }}" alt="">
+            </div>
+            <div class="detail-box">
+              <h5 style="color:white;">
+                <a href="/guard_select/{{guard.guard_id}}">{{guard.guard_name}}</a>
+              </h5>
+             
+              
+            </div>
+          </div>
+          </div>
+          {% endfor %}
+        
+        
+      </div>
+      <div class="btn-box">
+        <a href="">
+          View All
+        </a>
+      </div>
+    </div>
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <ul class="flash-messages text-white">
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+  </section>
+
+  <script>
+        // Show/hide the floating link based on scroll position
+        var lastScrollTop = 0;
+
+        $(window).scroll(function () {
+            var link = $("#floating-button");
+            var st = $(this).scrollTop();
+            
+            if (st > lastScrollTop){
+                // scrolling down
+                link.css("display", "block");
+            } else {
+                // scrolling up
+                link.css("display", "block");
+            }
+            
+            lastScrollTop = st;
+        });
+    </script>
+
+
+  <!-- end team section -->
+{% endblock %}

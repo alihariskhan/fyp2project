@@ -1,0 +1,53 @@
+<!-- bootstrap.min css -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='plugins/bootstrap/css/bootstrap.min.css') }}">
+  <!-- Icofont Css -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='plugins/icofont/icofont.min.css') }}">
+  <!-- Themify Css -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='plugins/themify/css/themify-icons.css') }}">
+  <!-- animate.css -->
+  <link rel="stylesheet" href=" {{ url_for('static', filename='plugins/animate-css/animate.css') }}">
+  <!-- Magnify Popup -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='plugins/magnific-popup/dist/magnific-popup.css' ) }}">
+  <!-- Owl Carousel CSS -->
+  <link rel="stylesheet" href=" {{ url_for('static', filename='plugins/slick-carousel/slick/slick.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='plugins/slick-carousel/slick/slick-theme.css') }} ">
+    
+
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp" rel="stylesheet">
+
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+  
+  <link rel="shortcut icon" href="{{ url_for('static', filename='img/favicon.png') }}" type="image/x-icon">
+
+  <!-- bootstrap core css -->
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.css') }}" />
+
+  <!-- fonts style -->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700|Poppins:400,600,700&display=swap" rel="stylesheet" />
+
+  <!-- Custom styles for this template -->
+  <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet" />
+  <!-- responsive style -->
+  <link href="{{ url_for('static', filename='css/responsive.css') }}" rel="stylesheet" />
+
+{% if result %}
+        <table class="section blog bg-gray table table-sm table-hover table-striped table-bordered">
+            
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Check-in Time</th>
+                    
+                </tr>
+            </thead>
+            <tbody>
+                {% for attendance in result %}
+                    <tr>
+                        <td>{{ attendance.checkin_time.date() }}</td>
+                        <td>{{ attendance.checkin_time.time() }}</td>
+                        <!-- Add more columns as needed -->
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}

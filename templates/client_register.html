@@ -1,0 +1,45 @@
+{% extends "header.html" %}
+{% block body %}
+
+    <div class="background"></div>
+    <div class="container">
+        <div class="logreg-box" style="display: inline-block;">
+            <div class="form-box login">
+                <form method="POST" action="/register_form" enctype="multipart/form-data">
+                    <h2>Sign Up</h2>
+
+                    <div class="input-box">
+                        <span class="icon"><i class='bx bx-user'></i></span>
+                        <input type="text" name="username" id="1">
+                        <label>Enter UserName</label>
+                    </div>
+
+                    <div class="input-box">
+                        <span class="icon"><i class='bx bxs-phone'></i></span>
+                        <input type="email" name="email" id="2">
+                        <label>Email Your Email</label>
+                    </div>
+
+                    <div class="input-box">
+                        <span class="icon"><i class='bx bxs-phone'></i></span>
+                        <input type="password" name="password" id="4">
+                        <label>Enter Password</label>
+                    </div>
+
+                    <div class="input-box">
+                        <span class="icon"><i class='bx bxs-phone'></i></span>
+                        <input type="Password" name="confirm_password" id="5">
+                        <label>Confirm Password</label>
+                    </div>
+
+                    <button type="submit" value="submit" class="btn">Register</button>
+
+                <div class="input-box">
+                        <p><a href="{{ url_for('login') }}">Login form here</a></p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

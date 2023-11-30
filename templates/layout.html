@@ -1,0 +1,98 @@
+<!doctype html>
+
+
+
+<html lang="en">
+  <head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="GYm,fitness,business,company,agency,multipurpose,modern,bootstrap4">
+    
+  <!-- theme meta -->
+  <meta name="theme-name" content="Security Guard Company" />
+  
+  
+
+  <title>Security Guard Company</title>
+
+  
+  <!-- bootstrap.min css -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='plugins/bootstrap/css/bootstrap.min.css') }}">
+  <!-- Icofont Css -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='plugins/icofont/icofont.min.css') }}">
+  <!-- Themify Css -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='plugins/themify/css/themify-icons.css') }}">
+  <!-- animate.css -->
+  <link rel="stylesheet" href=" {{ url_for('static', filename='plugins/animate-css/animate.css') }}">
+  <!-- Magnify Popup -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='plugins/magnific-popup/dist/magnific-popup.css' ) }}">
+  <!-- Owl Carousel CSS -->
+  <link rel="stylesheet" href=" {{ url_for('static', filename='plugins/slick-carousel/slick/slick.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='plugins/slick-carousel/slick/slick-theme.css') }} ">
+    
+
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp" rel="stylesheet">
+
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+  
+  <link rel="shortcut icon" href="{{ url_for('static', filename='img/favicon.png') }}" type="image/x-icon">
+
+  <!-- bootstrap core css -->
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.css') }}" />
+
+  <!-- fonts style -->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700|Poppins:400,600,700&display=swap" rel="stylesheet" />
+
+  <!-- Custom styles for this template -->
+  <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet" />
+  <!-- responsive style -->
+  <link href="{{ url_for('static', filename='css/responsive.css') }}" rel="stylesheet" />
+
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+
+
+</head>
+
+<body>
+  <div class="hero_area">
+    <!-- header section strats -->
+    <div class="hero_bg_box">
+      <div class="img-box">
+        <img src="{{ url_for('static', filename='img/hero-bg.jpg') }}" alt="">
+      </div>
+    </div>
+
+     <header class="header_section">
+      <div class="header_top">
+        <div class="container-fluid">
+          <div class="contact_link-container">
+            <a href="" class="contact_link1">
+              <i class="fa fa-map-marker" aria-hidden="true"></i>
+              <span>
+                Lorem ipsum dolor sit amet,
+              </span>
+            </a>
+            <a class="navbar-brand" href="index.html">
+              <span>
+                Guarder
+              </span>
+            </a>
+            <a href="" class="contact_link3">
+              <i class="fa fa-envelope" aria-hidden="true"></i>
+              <span>
+                demo@gmail.com
+              </span>
+            </a>
+          </div>
+        </div>
+      </div>
+      
+</header>
+    {% block body %}
+<!--the layout of pages print here-->
+{% endblock %}
+</body>
+</html>

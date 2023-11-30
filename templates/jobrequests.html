@@ -1,0 +1,72 @@
+{% extends "layout.html" %}
+{% block body %}
+
+<!-- Header Close -->
+
+<div class="main-wrapper ">
+<section class=" bg-2">
+  
+</section>
+<!-- Section Blog start -->
+<section class="section blog">
+<center><h1 style="color: white;">Security <span style="color: yellow;">Company</span></h1></center>
+
+	<div class="container">
+
+    <!-- Add new post button -->
+    
+
+    <a href="/admindashboard"><button class="btn btn-small btn-round-full btn-green">Dashboard</button></a>
+    
+    <hr>
+
+    <!-- Table fetching post from database -->
+
+		<table class="section blog bg-gray table table-sm table-hover table-striped table-bordered">
+      <center><h3 class=" blog bg-gray">Requests for Jobs</h3></center>
+  <thead>
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">Name</th>
+      <th scope="col">CNIC</th>
+      <th scope="col">Phone No</th>
+      <th scope="col">Email</th>
+      <th scope="col">Date</th>
+      <th scope="col" colspan="3">Operations</th>
+    </tr>
+  </thead>
+  <tbody>
+  	{% for request in requests %}
+    <tr>
+      
+      <td>{{request.applicant_id}}</td>
+      <td>{{request.candidate_name}}</td>
+      <td>{{request.candidate_cnic}}</td>
+      <td>{{request.candidate_phone_no}}</td>
+      <td>{{request.candidate_email}}</td>
+      <td>{{request.date}}</td>
+      
+      <td><a href="/call/{{request.applicant_id}}"><button class="btn btn-small btn-round-full btn-green call-button"><span class="material-icons-sharp">
+                  call_to_action
+                </span></button></a></td>
+
+        
+
+
+        <td><a href="/decline/{{request.applicant_id}}"><button class="btn btn-small btn-round-full btn-red decline-button"><span class="material-icons-sharp">
+thumb_down_alt
+</span></button></a></td>
+    </tr>
+{% endfor %}
+    
+  </tbody>
+</table>
+
+		
+	</div>
+</section>
+<!-- Section Blog End -->
+
+
+
+{% endblock %}

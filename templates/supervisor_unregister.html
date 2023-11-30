@@ -1,0 +1,71 @@
+{% extends "navbar.html" %}
+{% block body %}
+<!-- form css -->
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/form_style.css') }}" />
+
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+<div class="container">
+    
+    <center><h1 style="color: white;">Unregister <span style="color: yellow;">Supervisor</span></h1></center>
+
+    
+    
+    <table class="section blog bg-gray table table-sm table-hover table-striped table-bordered" id="supervisor-list">
+      <h3 class="bg-white" style="font-style: oblique;">Supervisors List</h3>
+      <thead>
+    <tr>
+      <th scope="col">ID</th>
+      <th scope="col">Name</th>
+      <th scope="col">CNIC</th>
+      <th scope="col">Phone No</th>
+      <th scope="col">Address</th>
+      <th scope="col" colspan="3">Operations</th>
+    </tr>
+  </thead>
+  <tbody>
+        {% for supervisor in supervisors %}
+        <tr>
+      
+      <td>{{ supervisor.supervisor_id }}</td>
+      <td>{{ supervisor.supervisor_name }}</td>
+      <td>{{ supervisor.supervisor_cnic }}</td>
+      <td>{{ supervisor.supervisor_phone_no }}</td>
+      <td>{{supervisor.supervisor_address}}</td>
+            <td>
+                 
+                <button class="btn btn-small btn-round-full btn-danger delete-btn" data-id="{{ supervisor.supervisor_id }}">Delete</button>
+            </td>
+            
+        {% endfor %}
+    </td>
+  </tr>
+</tbody>
+</table>
+
+
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('.delete-btn').on('click', function () {
+            var supervisorId = $(this).data('id');
+            $.ajax({
+                type: 'POST',
+                url: '/supervisor/delete/' + supervisorId,
+                success: function (response) {
+                    alert(response);
+                    // Reload the page after successful deletion
+                    location.reload();
+                },
+                error: function (xhr, status, error) {
+                    alert('Error: ' + xhr.responseText);
+                    console.log(error);
+                }
+            });
+        });
+    });
+</script>
+
+{% endblock %}

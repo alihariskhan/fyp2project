@@ -1,0 +1,27 @@
+{% extends "navbar.html" %}
+{% block body %}
+<!-- form css -->
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/form_style.css') }}" />
+
+<div class="login-box">
+  <h2>Register Admin</h2>
+  <form method="post" action="/admin/register">
+    <div class="user-box" style="position: relative;">
+      <input  type="string" name="username" required="">
+      <label>ID</label>
+    </div>
+    <div class="user-box" style="position: relative;">
+      <input  type="string" name="name" required="">
+      <label>Name</label>
+    </div>
+    <div class="user-box">
+      <input type="password" name="password" required="">
+      <label>Password</label>
+    </div>
+    <button  type="submit" value="submit" style="padding:10px; background:black; color:white;">
+      Register
+    </button>
+  </form>
+</div>
+
+{% endblock %}
