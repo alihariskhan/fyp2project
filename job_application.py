@@ -1,6 +1,8 @@
-from flask import request, render_template, Response
-from sql import db
 from datetime import datetime
+
+from flask import request, render_template, Response
+
+from sql import db
 
 
 class Job_application(db.Model):

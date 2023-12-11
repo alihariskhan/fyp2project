@@ -1,7 +1,7 @@
 from flask import redirect, request
 
-from sql import db
 from guard import Guard
+from sql import db
 
 
 class Call_delete:

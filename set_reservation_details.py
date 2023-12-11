@@ -5,10 +5,10 @@ from flask_login import current_user
 from sqlalchemy import text
 
 from client import Client
-from sql import db
 from client_guard_reservation import Client_Guard_Reservation
 from guard_reservation import Guard_reservation
 from location_details import location_Details
+from sql import db
 
 
 class Set_Reservation_Details:

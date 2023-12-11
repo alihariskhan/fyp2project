@@ -1,8 +1,11 @@
+from datetime import datetime
+
 from flask import request, redirect
+
 from contactedforinterview import Contactedforinterview
 from guard import Guard
 from sql import db
-from datetime import datetime
+
 
 class CallApprove:
     def approve(self,id):

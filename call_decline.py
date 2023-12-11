@@ -1,7 +1,8 @@
 from flask import request, redirect
-from sql import db
-from job_application import Job_application
+
 from contactedforinterview import Contactedforinterview
+from job_application import Job_application
+from sql import db
 
 
 class Call_decline:

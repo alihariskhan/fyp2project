@@ -1,6 +1,8 @@
 from flask import request, redirect, render_template
-from sql import db
+
 from guard import Guard
+from sql import db
+
 
 class Call_editguard:
     def editguard(self, id):

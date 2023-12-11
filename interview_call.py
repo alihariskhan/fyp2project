@@ -1,8 +1,11 @@
+from datetime import datetime
+
 from flask import redirect
+
+from callforinterview import CallForInterview
 from job_application import Job_application
 from sql import db
-from datetime import datetime
-from callforinterview import CallForInterview
+
 
 class Interview_call:
     def call(self, id):

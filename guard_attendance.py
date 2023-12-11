@@ -1,8 +1,8 @@
 from flask import request, Response
-from sql import db
 
 # import Guard class
 from guard import Guard
+from sql import db
 
 
 class GuardAttendance(db.Model):

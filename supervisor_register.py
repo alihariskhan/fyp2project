@@ -1,9 +1,7 @@
-from flask import request, render_template, redirect, url_for, flash, Response
-from flask_login import login_user
-from werkzeug.exceptions import BadRequest, NotFound
+from flask import request, render_template, redirect, url_for, Response
 
-from supervisor import Supervisor
 from sql import db
+from supervisor import Supervisor
 
 
 class Supervisor_register:

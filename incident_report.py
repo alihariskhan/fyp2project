@@ -1,11 +1,12 @@
-from datetime import datetime, time, date
+from datetime import datetime
+
 from flask import render_template, request, redirect
 from sqlalchemy import func
 
 from guard import Guard
+from incident_guard import Incident_Guard
 from location_details import location_Details
 from sql import db
-from incident_guard import Incident_Guard
 
 
 class Incident_Report(db.Model):

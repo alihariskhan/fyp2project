@@ -1,36 +1,35 @@
-from flask import Flask, render_template, redirect, Response, request
-from flask_login import LoginManager, login_required, logout_user, current_user
 from datetime import datetime
 
+from flask import Flask, render_template, redirect, Response, request
+from flask_login import LoginManager, login_required, logout_user, current_user
 from sqlalchemy import func
 
-from call_approve import CallApprove
+from admin import Admin
 # classes import
 from admin_delete import Call_delete
+from admin_register import Admin_register
+from call_approve import CallApprove
+from call_decline import Call_decline
 from call_editguard import Call_editguard
 from callforinterview import CallForInterview
-from guard import Guard
-from job_application import Job_application
-from sql import db
-from call_decline import Call_decline
-from interview_call import Interview_call
-from setinterviewdate import Call_interviewDate
-from contactedforinterview import Contactedforinterview
-from admin import Admin
 from client import Client
-from admin_register import Admin_register
-from supervisor import Supervisor
-from guard_attendance import GuardAttendance
-from supervisor_register import Supervisor_register
-from schedule import Schedule
-from client_guard_reservation import Client_Guard_Reservation
-from set_reservation_details import Set_Reservation_Details
 from client_delete import Client_delete
-from login import Login
-from location_details import location_Details
+from client_guard_reservation import Client_Guard_Reservation
+from contactedforinterview import Contactedforinterview
+from guard import Guard
+from guard_attendance import GuardAttendance
 from guard_reservation import Guard_reservation
 from incident_report import Incident_Report
-from incident_guard import Incident_Guard
+from interview_call import Interview_call
+from job_application import Job_application
+from location_details import location_Details
+from login import Login
+from schedule import Schedule
+from set_reservation_details import Set_Reservation_Details
+from setinterviewdate import Call_interviewDate
+from sql import db
+from supervisor import Supervisor
+from supervisor_register import Supervisor_register
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = "mysql://root:@localhost/fyp2"

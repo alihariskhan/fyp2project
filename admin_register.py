@@ -1,5 +1,4 @@
 from flask import request, render_template, redirect, url_for, Response
-from flask_login import login_user
 
 from admin import Admin
 from sql import db
