@@ -1,0 +1,92 @@
+{% extends "layout.html" %}
+{% block body %}
+    <!-- form css -->
+
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/form_style.css') }}" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css">
+
+
+    <br><br><br><br>
+    <div class="container">
+        <h2 class="text-white">Incident Report</h2>
+
+        
+
+        <hr style="background:white;">
+
+        <form method="post" action="/incident_report" id="scheduleFormMultiple" >
+            <!-- Responsive Form -->
+            <div class="form-row">
+
+
+                <div class="form-group col-md-6">
+                    <h7 class="text-white">Incident Date</h7>
+                    <input type="Date" name="incident_date" class="form-control">
+                </div>
+
+                <div class="form-group col-md-6">
+                    <h7 class="text-white">Incident Time</h7>
+                    <input type="Time" name="incident_time" class="form-control">
+                </div>
+
+                <div class="form-group col-md-6">
+                <label class="text-white" for="incident_guard">Guard at location:</label>
+                    <!-- Add the select2 class to enable the Select2 plugin -->
+                    <select id="incident_guard" name="incident_guard" class="form-control select2" multiple>
+                        {% for guard in guards %}
+                        <option value="{{guard.guard_id}}">{{guard.guard_id}}.. {{guard.guard_name}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+
+                    <div class="form-group col-md-6">
+                <label class="text-white" for="incident_guard">Incident location:</label>
+                    <!-- Add the select2 class to enable the Select2 plugin -->
+                    <select id="incident_location" name="incident_location" class="form-control select3">
+                        {% for location in locations %}
+                        <option value="{{location.location_id}}"> {{location.location}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-group col-md-6">
+                    <label class="text-white">Description</label>
+                    <textarea name="description" rows="3" class="form-control form-control-lg" required="" placeholder="Enter Description"></textarea>
+                </div>
+
+                <div class="form-group col-md-12">
+                    <button class="btn btn-small btn-round-full" type="submit" value="submit" style="padding:10px; background:grey; color:white;">
+                        Submit
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+
+
+<script>
+    // Initialize Select2
+    $(document).ready(function() {
+        $('.select2').select2({
+            placeholder: 'Select guards',
+            allowClear: true, // Adds a clear button
+            closeOnSelect: false, // Keep the dropdown open after selection
+            // Add other options as needed
+        });
+    });
+    // Initialize Select2
+    $(document).ready(function() {
+        $('.select3').select2({
+            placeholder: 'Location',
+            allowClear: true, // Adds a clear button
+            closeOnSelect: false, // Keep the dropdown open after selection
+            // Add other options as needed
+        });
+    });
+</script>
+
+{% endblock %}

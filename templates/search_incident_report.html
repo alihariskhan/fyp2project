@@ -1,0 +1,96 @@
+{% extends "layout.html" %}
+{% block body %}
+    <!-- form css -->
+
+
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/form_style.css') }}" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css">
+
+
+    <br><br><br><br>
+    <div class="container">
+        <h2 class="text-white">Incident Report</h2>
+
+        
+
+        <hr style="background:white;">
+
+        <form method="post" action="/search_incident_report" id="scheduleFormMultiple" >
+            <!-- Responsive Form -->
+            <div class="form-row">
+
+                
+                <div class="form-group col-md-6">
+                    <h4 class="text-white">Search By Date</h4>
+                    <h7 class="text-white">Start Date</h7>
+                    <input type="Date" name="start_date" class="form-control">
+                
+
+                
+                    <h7 class="text-white">End Date</h7>
+                    <input type="Date" name="end_date" class="form-control">
+                </div>
+
+                <br>
+                <div class="form-group col-md-6">
+                    <h4 class="text-white">Search By Guard ID</h4>
+                <label class="text-white" for="incident_guard">Guard ID:</label>
+                    <!-- Add the select2 class to enable the Select2 plugin -->
+                    <select id="incident_guard" name="incident_guard" class="form-control select2">
+                        <option value="">Select Guard</option>
+                        {% for guard in guards %}
+                        <option value="{{guard.guard_id}}">{{guard.guard_id}}.. {{guard.guard_name}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                    
+                    <div class="form-group col-md-6">
+                        <h4 class="text-white">Search by Location</h4>
+                <label class="text-white" for="incident_location">location:</label>
+                    <!-- Add the select2 class to enable the Select2 plugin -->
+                    <select id="incident_location" name="incident_location" class="form-control select3">
+                        <option value="">Select Location</option>
+                        {% for location in locations %}
+                        <option value="{{location.location_id}}"> {{location.location}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                <div class="from-group col-md-12"></div>
+                
+                <div class="form-group col-md-2">
+                    <button class="btn btn-small btn-round-full" type="submit" value="submit" style="padding:10px; background:grey; color:white;">
+                        Search
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+
+
+<script>
+    // Initialize Select2
+    $(document).ready(function() {
+        $('.select2').select2({
+            placeholder: 'Select guards',
+            allowClear: true, // Adds a clear button
+            closeOnSelect: true, // Keep the dropdown open after selection
+            // Add other options as needed
+        });
+    });
+    // Initialize Select2
+    $(document).ready(function() {
+        $('.select3').select2({
+            placeholder: 'Location',
+            allowClear: true, // Adds a clear button
+            closeOnSelect: true, // Keep the dropdown open after selection
+            // Add other options as needed
+        });
+    });
+</script>
+
+{% endblock %}

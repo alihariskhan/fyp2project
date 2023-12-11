@@ -1,0 +1,79 @@
+{% extends "layout.html" %}
+{% block body %}
+
+<!-- Header Close -->
+
+<div class="main-wrapper ">
+<section class=" bg-2">
+  
+</section>
+<!-- Section Blog start -->
+<section class="section blog">
+<center><h1 style="color: white;">Security <span style="color: yellow;">Company</span></h1></center>
+
+	<div class="container">
+
+    <!-- Add new post button -->
+    
+
+    <a href="/supervisordashboard"><button class="btn btn-small btn-round-full btn-green">Dashboard</button></a>
+    
+    <hr>
+
+    <!-- Table fetching post from database -->
+
+<table class="section blog bg-gray table table-sm table-hover table-striped table-bordered">
+    <center><h3 class=" blog bg-gray">Guard List</h3></center>
+    <thead>
+        <tr>
+            <th>Incident ID</th>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Description</th>
+            <th>Location</th>
+            <th>Guard ID</th>
+            <th>Guard Name</th> <!-- Add more columns as needed -->
+        </tr>
+    </thead>
+    <!-- ... (previous code) ... -->
+<tbody>
+    {% set grouped_results = {} %}
+    {% for incident_report, incident_guard, location_details, guard in results %}
+        {% set key = incident_report.incident_id %}
+        {% set guard_id = incident_guard.guard_id %}
+        {% set guard_name = guard.guard_name %}  
+        
+        {% if key not in grouped_results %}
+            {% set _ = grouped_results.update({key: {'incident': incident_report, 'location': location_details, 'guards': [guard_id], 'guard_name': [guard_name]}}) %}
+        {% else %}
+            {% set _ = grouped_results[key]['guards'].append(guard_id) %}
+            {% set _ = grouped_results[key]['guard_name'].append(guard_name) %}
+        {% endif %}
+    {% endfor %}
+
+    {% for key, group in grouped_results.items() %}
+        <tr>
+            <td>{{ key }}</td>
+            <td>{{ group['incident'].date }}</td>
+            <td>{{ group['incident'].time }}</td>
+            <td>{{ group['incident'].description }}</td>
+            <td>{{ group['location'].location }}</td>
+            <td>{{ group['guards'] | join(',') }}</td>
+            <td>{{ group['guard_name'] | join(',') }}</td>
+            <!-- Add more columns as needed -->
+        </tr>
+    {% endfor %}
+</tbody>
+
+</table>
+
+
+
+		
+	</div>
+</section>
+<!-- Section Blog End -->
+
+
+
+{% endblock %}
