@@ -98,7 +98,6 @@ class Incident_Report(db.Model):
                 )
                 print("condition2")
 
-
                 return render_template("searched_incident_report.html", results=results)
 
             elif all(condition3):
