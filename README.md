@@ -21,7 +21,8 @@ Database: MySQL.
 
 
 Timeline:
-![image](https://github.com/alihariskhan/fyp2project/assets/148605710/e5e96930-a6c7-4c89-9f66-4c004e82d155)
+![image](https://github.com/alihariskhan/fyp2project/assets/148605710/3ae2bafb-62dd-438b-a5f6-08c024bf5a41)
+
 
 
 
