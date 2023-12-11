@@ -26,7 +26,7 @@
       <center><h3 class=" blog bg-gray">Reservation Requests</h3></center>
   <thead>
     <tr>
-      <th scope="col">Selection ID</th>
+      <th scope="col">Reservation ID</th>
       <th scope="col">Guard ID</th>
       <th scope="col">Client ID</th>
       <th scope="col">Date</th>
@@ -35,13 +35,13 @@
     </tr>
   </thead>
   <tbody>
-  	{% for request in requests %}
+  	{% for client_guard_reservation, guard_reservaton in requests %}
     <tr>
       
-      <td>{{request.select_id}}</td>
-      <td>{{request.guard_id}}</td>
-      <td>{{request.client_id}}</td>
-      <td>{{request.datetime}}</td>
+      <td>{{client_guard_reservation.reservation_id}}</td>
+      <td>{{client_guard_reservation.guard_id}}</td>
+      <td>{{client_guard_reservation.client_id}}</td>
+      <td>{{guard_reservaton.res_datetime}}</td>
       
       <td><a href="/call/{{request.applicant_id}}"><button class="btn btn-small btn-round-full btn-green call-button"><span class="material-icons-sharp">
                   call_to_action

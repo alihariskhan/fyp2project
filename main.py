@@ -28,6 +28,9 @@ from set_reservation_details import Set_Reservation_Details
 from client_delete import Client_delete
 from login import Login
 from location_details import location_Details
+from guard_reservation import Guard_reservation
+from incident_report import Incident_Report
+from incident_guard import Incident_Guard
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = "mysql://root:@localhost/fyp2"
@@ -62,6 +65,42 @@ def fetch_dashboard_data(admin_id, admin_name):
         'admin_name': admin_name
     }
     return data
+
+
+@app.route("/show_all_incident_report", methods=['GET', 'POST'])
+@login_required
+def show_all_incident_report():
+    supervisor_id_exist = Supervisor.query.filter_by(supervisor_id=current_user.supervisor_id).first()
+    if supervisor_id_exist:
+        obj = Incident_Report()
+        result = obj.show_all_incident_report()
+        return result
+    else:
+        return "access denied"
+
+
+@app.route("/search_incident_report", methods=['GET', 'POST'])
+@login_required
+def search_incident_report():
+    supervisor_id_exist = Supervisor.query.filter_by(supervisor_id=current_user.supervisor_id).first()
+    if supervisor_id_exist:
+        obj = Incident_Report()
+        result = obj.search_incident_report()
+        return result
+    else:
+        return "access denied"
+
+
+@app.route("/incident_report", methods=['GET', 'POST'])
+@login_required
+def incident_report():
+    supervisor_id_exist = Supervisor.query.filter_by(supervisor_id=current_user.supervisor_id).first()
+    if supervisor_id_exist:
+        obj = Incident_Report()
+        result = obj.incident_report()
+        return result
+    else:
+        return "access denied"
 
 
 @app.route("/show_attendance", methods=['GET', 'POST'])
@@ -120,7 +159,14 @@ def reservation_details():
 @app.route("/reservation_request", methods=['GET', 'POST'])
 @login_required
 def reservation_request():
-    requests = Client_Guard_Reservation.query.all()
+    requests = (
+        db.session.query(Client_Guard_Reservation, Guard_reservation)
+        .select_from(Client_Guard_Reservation)
+        .join(Guard_reservation, Client_Guard_Reservation.reservation_id == Guard_reservation.reservation_id)
+
+        .all()
+    )
+    # requests = Client_Guard_Reservation.query.all()
     return render_template("reservation_requests.html", requests=requests)
 
 

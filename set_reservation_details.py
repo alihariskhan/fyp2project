@@ -24,25 +24,33 @@ class Set_Reservation_Details:
                 'schedule_details': request.form['schedule_details'],
                 'duty_shift': request.form['shiftselect']
             }
-            form_data2 = {
+            print("Form Data:", form_data)
 
-                'start_date': request.form['start_date'],
-                'end_date': request.form['end_date'],
-                'start_time': request.form['duty_start_time'],
-                'end_time': request.form['duty_end_time'],
-                'schedule_details': request.form['schedule_details'],
-                'duty_shift': request.form['shiftselect']
-            }
-            form_data3 = {
-                'location': request.form['location'],
-                'start_date': request.form['start_date'],
-                'end_date': request.form['end_date'],
-                'schedule_details': request.form['schedule_details'],
+            # if client requires guards on same timing and same location
+            condition1 = (form_data['location'].strip() and form_data['start_time'] != time(0, 0, 0)
+                          and form_data['end_time'] != time(0, 0, 0)
+                          and form_data['duty_shift'] != "null")
 
-            }
+            # if client requires guards on same timing but different locations
+            condition2 = (form_data['location'].strip() == '' and form_data['start_time'] != time(0, 0, 0)
+                          and form_data['end_time'] != time(0, 0, 0)
+                          and form_data['duty_shift'] != "null")
 
-            if (form_data and form_data['location'].strip() and form_data['start_time'] != time(0, 0, 0)
-                    and form_data['end_time'] != time(0, 0, 0) and form_data['duty_shift'] != "null"):
+            # if client requires guards on same locations but different timings
+            condition3 = (form_data['location'].strip() and form_data['start_time'] == ''
+                          and form_data['end_time'] == '' and form_data['duty_shift'] == "null")
+
+            # if client requires guards on different timing and different locations
+            condition4 = (form_data['location'].strip() == '' and form_data['start_time'] == ''
+                          and form_data['end_time'] == ''
+                          and form_data['duty_shift'] == "null")
+
+            print("Condition 1:", condition1)
+            print("Condition 2:", condition2)
+            print("Condition 3:", condition3)
+            print("Condition 4:", condition4)
+
+            if condition1:
 
                 entry = location_Details(location=form_data['location'])
                 db.session.add(entry)
@@ -90,12 +98,12 @@ class Set_Reservation_Details:
                     db.session.commit()
                 return '{"success": true}'
 
-            elif form_data2 and form_data2['duty_shift'] != "null":
+            elif condition2:
 
                 entry_guard_reservation = Guard_reservation(res_datetime=datetime.now(),
-                                                            start_date=form_data2['start_date'],
-                                                            end_date=form_data2['end_date'],
-                                                            schedule_details=form_data2['schedule_details'])
+                                                            start_date=form_data['start_date'],
+                                                            end_date=form_data['end_date'],
+                                                            schedule_details=form_data['schedule_details'])
                 db.session.add(entry_guard_reservation)
                 db.session.commit()
 
@@ -105,9 +113,9 @@ class Set_Reservation_Details:
                             .filter(Client_Guard_Reservation.reservation_id.is_(None))).all()
 
                 for request_entry in requests:
-                    request_entry.duty_shift = form_data2['duty_shift']
-                    request_entry.start_time = form_data2['start_time']
-                    request_entry.end_time = form_data2['end_time']
+                    request_entry.duty_shift = form_data['duty_shift']
+                    request_entry.start_time = form_data['start_time']
+                    request_entry.end_time = form_data['end_time']
                     db.session.commit()
 
                 distinct_guard_ids = (Client_Guard_Reservation.query
@@ -152,16 +160,16 @@ class Set_Reservation_Details:
                     db.session.commit()
                 return '{"success": true2}'
 
-            elif form_data3 and form_data3['location'].strip():
+            elif condition3:
 
-                entry = location_Details(location=form_data3['location'])
+                entry = location_Details(location=form_data['location'])
                 db.session.add(entry)
                 db.session.commit()
 
                 entry_guard_reservation = Guard_reservation(res_datetime=datetime.now(),
-                                                            start_date=form_data2['start_date'],
-                                                            end_date=form_data2['end_date'],
-                                                            schedule_details=form_data2['schedule_details'])
+                                                            start_date=form_data['start_date'],
+                                                            end_date=form_data['end_date'],
+                                                            schedule_details=form_data['schedule_details'])
 
                 db.session.add(entry_guard_reservation)
                 db.session.commit()
@@ -213,7 +221,7 @@ class Set_Reservation_Details:
 
                 return '{"success": true3}'
 
-            else:
+            elif condition4:
                 start_date = request.form['start_date']
                 end_date = request.form['end_date']
                 schedule_details = request.form['schedule_details']
@@ -232,9 +240,7 @@ class Set_Reservation_Details:
                     duty_end_time = request.form.get(f'{guard_id}_duty_end_time')
                     location = request.form.get(f'{guard_id}_location')
 
-                    print(f"Fetching record for guard_id: {guard_id}")
                     requests = Client_Guard_Reservation.query.filter_by(guard_id=guard_id).first()
-                    print(f"Result: {requests}")
 
                     requests.duty_shift = duty_shift
                     requests.start_time = duty_start_time
@@ -274,6 +280,8 @@ class Set_Reservation_Details:
 
                     # Return a simple JSON-formatted string
                 return '{"success": true4}'
+            else:
+                return '{"success": false, "condition not matched"}'
 
         except Exception as e:
             print(f"Error: {str(e)}")
