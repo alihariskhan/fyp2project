@@ -67,6 +67,7 @@ class Incident_Report(db.Model):
             condition3 = (start_date == '', end_date == '', incident_location != '', incident_guard == '')
 
             print(f"{start_date}, {end_date}, {incident_location}, {incident_guard}")
+            #first condition search by date range
             if all(condition1):
                 results = (db.session.query(Incident_Report, Incident_Guard, location_Details, Guard)
                            .select_from(Incident_Report)
@@ -78,7 +79,7 @@ class Incident_Report(db.Model):
                            )
                 print("condition1")
                 return render_template("searched_incident_report.html", results=results)
-
+            #second condition search by guard id
             elif all(condition2):
                 guard_rows = db.session.query(Incident_Guard.incident_id).filter(
                     Incident_Guard.guard_id == incident_guard).distinct().all()
@@ -99,7 +100,7 @@ class Incident_Report(db.Model):
                 print("condition2")
 
                 return render_template("searched_incident_report.html", results=results)
-
+            #third condition search by location
             elif all(condition3):
                 results = (db.session.query(Incident_Report, Incident_Guard, location_Details, Guard)
                            .select_from(Incident_Report)
