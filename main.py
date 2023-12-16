@@ -1,5 +1,6 @@
 from datetime import datetime
 
+from MySQLdb._exceptions import IntegrityError
 from flask import Flask, render_template, redirect, Response, request
 from flask_login import LoginManager, login_required, logout_user, current_user
 from sqlalchemy import func
@@ -11,17 +12,17 @@ from admin_register import Admin_register
 from call_approve import CallApprove
 from call_decline import Call_decline
 from call_editguard import Call_editguard
-from callforinterview import CallForInterview
+from interview import Interview, Interview_History
 from client import Client
 from client_delete import Client_delete
 from client_guard_reservation import Client_Guard_Reservation
-from contactedforinterview import Contactedforinterview
+
 from guard import Guard
 from guard_attendance import GuardAttendance
 from guard_reservation import Guard_reservation
 from incident_report import Incident_Report
 from interview_call import Interview_call
-from job_application import Job_application
+from job_application import Job_application, Job_application_History
 from location_details import location_Details
 from login import Login
 from schedule import Schedule
@@ -30,6 +31,7 @@ from setinterviewdate import Call_interviewDate
 from sql import db
 from supervisor import Supervisor
 from supervisor_register import Supervisor_register
+from rejection_history import Rejection_History
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = "mysql://root:@localhost/fyp2"
@@ -64,6 +66,31 @@ def fetch_dashboard_data(admin_id, admin_name):
         'admin_name': admin_name
     }
     return data
+
+
+@app.before_request
+def truncate_tables():
+    obj = Rejection_History()
+    result = obj.truncate()
+    return result
+
+
+@app.route("/clear_history")
+def clear_history():
+    obj = Rejection_History()
+    result = obj.clear_history()
+    return result
+
+
+@app.route("/rejection_history", methods=['GET', 'POST'])
+@login_required
+def rejection_history():
+    requests = (db.session.query(Job_application_History, Interview_History)
+                .select_from(Job_application_History)
+                .outerjoin(Interview_History, Job_application_History.applicant_id == Interview_History.applicant_id)
+                .all())
+
+    return render_template("rejection_history.html", requests=requests)
 
 
 @app.route("/show_all_incident_report", methods=['GET', 'POST'])
@@ -346,7 +373,9 @@ def guardlist():
 @app.route("/interviewtimings")
 @login_required
 def interviewtimings():
-    requests = Contactedforinterview.query.all()
+    requests = (db.session.query(Job_application, Interview).select_from(Job_application)
+                .join(Interview, Job_application.applicant_id == Interview.applicant_id).all())
+
     return render_template("interviewtimings.html", requests=requests)
 
 
@@ -364,8 +393,10 @@ def interviewdate(id):
 @login_required
 def admincall():
     # getting all data from Interview table
-    obj = CallForInterview()
-    requests = obj.query.filter_by().all()
+
+    requests = (Job_application.query.filter(Job_application.interview_request == True)
+                .filter(~Job_application.applicant_id.in_(db.session.query(Interview.applicant_id)))
+                .all())
     return render_template("admincalled.html", requests=requests)
 
 
@@ -390,9 +421,18 @@ def call(_id):
 
 
 # route to decline application of applicants or interviewee by admin
-@app.route("/decline/<string:_id>", methods=['GET', 'POST'])
+@app.route("/decline_application/<string:_id>", methods=['GET', 'POST'])
 @login_required
-def decline(_id):
+def decline_application(_id):
+    obj = Call_decline()
+    result = obj.decline(_id)
+    return result
+
+
+# route to decline application of applicants or interviewee by admin
+@app.route("/decline_interview/<string:_id>", methods=['GET', 'POST'])
+@login_required
+def decline_interview(_id):
     obj = Call_decline()
     result = obj.decline(_id)
     return result
@@ -403,7 +443,7 @@ def decline(_id):
 @login_required
 def job_requests():
     # fetching data from database
-    requests = Job_application.query.all()
+    requests = Job_application.query.filter_by(interview_request=False).all()
 
     return render_template("jobrequests.html", requests=requests)
 
@@ -426,9 +466,10 @@ def client_dashboard():
 @login_required
 def admin_dashboard():
     data = fetch_dashboard_data(current_user.admin_id, current_user.admin_name)
-    requests = Job_application.query.order_by(Job_application.applicant_id.desc()).limit(10).all()
+    requests = (Job_application.query.filter_by(interview_request=False)
+                .order_by(Job_application.applicant_id.desc()).limit(10).all())
     guard_count = Guard.query.count()
-    job_count = Job_application.query.count()
+    job_count = len(requests)
     client_count = Client.query.count()
     if guard_count < 1:
         guard_count = 0

@@ -17,6 +17,7 @@
     
 
     <a href="/admindashboard"><button class="btn btn-small btn-round-full btn-green">Dashboard</button></a>
+    <a href="/clear_history"><button class="btn btn-small btn-round-full btn-danger">Clear History</button></a>
     
     <hr>
 
@@ -34,7 +35,8 @@
       <th scope="col">Experience</th>
       <th scope="col">Date</th>
       <th scope="col">Time</th>
-      <th scope="col">Remarks</th>
+      <th scope="col">Rejection Time and date</th>
+      <th scope="col">Rejection IN</th>
       <th scope="col" colspan="3">Operations</th>
     </tr>
   </thead>
@@ -50,7 +52,14 @@
       <td>{{job_application.candidate_experience}}</td>
       <td>{{interview.date}}</td>
       <td>{{interview.time}}</td>
-      <td>{{interview.remarks}}</td>
+      <td>{{job_application.timestamp}}</td>
+      <td>
+        {% if job_application.application_operation %}
+          Rejected in Application
+        {% elif job_application.interview_operation %}
+          Rejected in Interview
+        {% endif %}
+      </td>
       
       <td><a href="/approve/{{job_application.applicant_id}}"><button class="btn btn-small btn-round-full btn-green approve-button"><span class="material-icons-sharp">
                   call_to_action

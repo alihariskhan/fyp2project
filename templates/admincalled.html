@@ -38,14 +38,14 @@
     {% for request in requests %}
     <tr>
       
-      <td>{{request.interviewer_id}}</td>
-      <td>{{request.interviewer_name}}</td>
-      <td>{{request.interviewer_cnic}}</td>
-      <td>{{request.interviewer_phone_no}}</td>
-      <td>{{request.interviewer_email}}</td>
+      <td>{{request.applicant_id}}</td>
+      <td>{{request.candidate_name}}</td>
+      <td>{{request.candidate_cnic}}</td>
+      <td>{{request.candidate_phone_no}}</td>
+      <td>{{request.candidate_email}}</td>
       <td>{{request.date}}</td>
       
-      <td><div><a href="/setinterviewdate/{{request.interviewer_id}}"><button class="btn btn-small btn-round-full btn-green select-button"><span class="material-icons-sharp">done</span></button></a></div></td>
+      <td><div><a href="/setinterviewdate/{{request.applicant_id}}"><button class="btn btn-small btn-round-full btn-green select-button"><span class="material-icons-sharp">done</span></button></a></div></td>
       
       
     </tr>
