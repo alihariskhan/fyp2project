@@ -8,3 +8,4 @@ class Guard_reservation(db.Model):
     start_date = db.Column(db.Date, nullable=True)
     end_date = db.Column(db.Date, nullable=True)
     schedule_details = db.Column(db.String, nullable=True)
+    payment = db.Column(db.Boolean, nullable=False, default=False)

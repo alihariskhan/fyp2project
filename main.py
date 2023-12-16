@@ -212,20 +212,11 @@ def guard_reservation():
 
 
 # Route to set schedule
-@app.route("/schedule")
+@app.route("/guard_schedule")
 @login_required
-def schedule():
-    guards = Guard.query.all()
-    locations = location_Details.query.all()
-    return render_template("set_schedule.html", guards=guards, locations=locations)
-
-
-# Route to set schedule
-@app.route("/set_schedule", methods=['POST'])
-@login_required
-def set_schedule():
+def guard_schedule():
     obj = Schedule()
-    result = obj.Set_schedule()
+    result = obj.schedule()
     return result
 
 
