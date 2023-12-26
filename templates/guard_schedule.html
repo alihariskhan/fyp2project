@@ -1,0 +1,91 @@
+{% extends "layout.html" %}
+{% block body %}
+
+<!-- Header Close -->
+
+<div class="main-wrapper ">
+<section class="bg-2">
+  
+</section>
+<!-- Section Blog start -->
+<section class="section blog">
+<center><h1 style="color: white;">Security <span style="color: yellow;">Company</span></h1></center>
+
+    <div class="container">
+
+    <!-- Add new post button -->
+    <a href="/supervisordashboard"><button class="btn btn-small btn-round-full btn-green">Dashboard</button></a>
+    
+    <hr class="bg-white">
+
+    <div class="form-group col-md-4">
+  <label class="text-white" for="guardId">Search by Guard ID:</label>
+  <input type="text" class="form-control" id="guardId" placeholder="Enter Guard ID">
+  <br>
+  <button class="btn btn-small btn-round-full btn-green" onclick="searchByGuardId()">Search</button>
+</div>
+
+<hr class="bg-white">
+    <!-- Table fetching post from the database -->
+    <table class="section blog bg-gray table table-sm table-hover table-striped table-bordered">
+      <center><h3 class="blog bg-gray">Guard Schedules</h3></center>
+      <thead>
+        <tr>
+          <th scope="col">Guard ID</th>
+          <th scope="col">Guard Name</th>
+          <th scope="col">Duty Shift</th>
+          <th scope="col">Start Time</th>
+          <th scope="col">End Time</th>
+          <th scope="col">Start Date</th>
+          <th scope="col">End Date</th>
+          <th scope="col">Location</th>
+          
+        </tr>
+      </thead>
+      <tbody>
+        
+        {% for client_guard, guard_reservation, location, guard in schedule %}
+          <tr>
+            <td>{{guard.guard_id}}</td>
+            <td>{{guard.guard_name}}</td>
+            <td>{{client_guard.duty_shift}}</td>
+            <td>{{client_guard.start_time}}</td>
+            <td>{{client_guard.end_time}}</td>
+            <td>{{guard_reservation.start_date}}</td>
+            <td>{{guard_reservation.end_date}}</td>
+            <td>{{location.location}}</td>
+            <!--<td>
+              <a href="/mark_paid"><button class="btn btn-small btn-round-full btn-green mark-paid"><span class="material-icons-sharp">call_to_action</span></button></a>
+              
+            </td>
+            <td>
+              <a href="/show_reservation_details/{{reservation_id}}"><button class="btn btn-small btn-round-full btn-green show-details"><span class="material-icons-sharp">call_to_action</span></button></a>
+              
+            </td>-->
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    </div>
+</section>
+<!-- Section Blog End -->
+
+<script>
+  function searchByGuardId() {
+    var input = document.getElementById('guardId').value.toLowerCase();
+    var tableRows = document.querySelectorAll('tbody tr');
+
+    tableRows.forEach(function(row) {
+      var guardId = row.querySelector('td:first-child').textContent.toLowerCase();
+
+      if (guardId.includes(input)) {
+        row.style.display = '';
+      } else {
+        row.style.display = 'none';
+      }
+    });
+  }
+</script>
+
+{% endblock %}

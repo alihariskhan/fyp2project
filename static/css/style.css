@@ -1688,6 +1688,50 @@ ul.dropdown-menu li {
             white-space: nowrap;
         }
 
+.mark-paid:hover::after {
+            content: "Mark Paid!"; /* Your tooltip text goes here */
+            position: absolute;
+            top: -30px; /* Adjust the distance of the tooltip from the button */
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 5px;
+            background-color: #333;
+            color: #fff;
+            border-radius: 5px;
+            font-size: 12px;
+            opacity: 0.8;
+            white-space: nowrap;
+        }
+.show-details:hover::after {
+            content: "Show Details"; /* Your tooltip text goes here */
+            position: absolute;
+            top: -30px; /* Adjust the distance of the tooltip from the button */
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 5px;
+            background-color: #333;
+            color: #fff;
+            border-radius: 5px;
+            font-size: 12px;
+            opacity: 0.8;
+            white-space: nowrap;
+        }
+
+.cancel:hover::after {
+            content: "Cancel!"; /* Your tooltip text goes here */
+            position: absolute;
+            top: -30px; /* Adjust the distance of the tooltip from the button */
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 5px;
+            background-color: #333;
+            color: #fff;
+            border-radius: 5px;
+            font-size: 12px;
+            opacity: 0.8;
+            white-space: nowrap;
+        }
+
 .decline-button:hover::after {
             content: "Decline!"; /* Your tooltip text goes here */
             position: absolute;

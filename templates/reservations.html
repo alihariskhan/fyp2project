@@ -1,0 +1,69 @@
+{% extends "layout.html" %}
+{% block body %}
+
+<!-- Header Close -->
+
+<div class="main-wrapper ">
+<section class="bg-2">
+  
+</section>
+<!-- Section Blog start -->
+<section class="section blog">
+<center><h1 style="color: white;">Security <span style="color: yellow;">Company</span></h1></center>
+
+    <div class="container">
+
+    <!-- Add new post button -->
+    <a href="/supervisordashboard"><button class="btn btn-small btn-round-full btn-green">Dashboard</button></a>
+    
+    <hr>
+
+    <!-- Table fetching post from the database -->
+    <table class="section blog bg-gray table table-sm table-hover table-striped table-bordered">
+      <center><h3 class="blog bg-gray">Reservations</h3></center>
+      <thead>
+        <tr>
+          <th scope="col">Reservation ID</th>
+          <th scope="col">Client ID</th>
+          <th scope="col">Client Name</th>
+          <th scope="col">Guard IDs</th>
+          <th scope="col">Guard Names</th>
+          <th scope="col">Reservation DateTime</th>
+          <th scope="col">Operations</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% set grouped_reservations = {} %}
+        {% for client_guard, reservation, client, location, guard in reservations %}
+          {% set reservation_id = reservation.reservation_id %}
+          {% set guard_ids = grouped_reservations.get(reservation_id, {'ids': []}).ids + [guard.guard_id] %}
+          {% set guard_names = grouped_reservations.get(reservation_id, {'names': []}).names + [guard.guard_name] %}
+          {% set _ = grouped_reservations.update({reservation_id: {'ids': guard_ids, 'names': guard_names, 'client_id': client.client_id, 'client_name': client.client_name, 'res_datetime': reservation.res_datetime}}) %}
+        {% endfor %}
+
+        {% for reservation_id, data in grouped_reservations.items() %}
+          <tr>
+            <td>{{ reservation_id }}</td>
+            <td>{{ data.client_id }}</td>
+            <td>{{ data.client_name }}</td>
+            <td>{{ data.ids | join(',') }}</td>
+            <td>{{ data.names | join(',') }}</td>
+            <td>{{ data.res_datetime }}</td>
+            <!--<td>
+              <a href="/mark_paid"><button class="btn btn-small btn-round-full btn-green mark-paid"><span class="material-icons-sharp">call_to_action</span></button></a>
+              
+            </td>-->
+            <td>
+              <a href="/show_reservation_details/{{reservation_id}}"><button class="btn btn-small btn-round-full btn-green show-details"><span class="material-icons-sharp">call_to_action</span></button></a>
+              
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    </div>
+</section>
+<!-- Section Blog End -->
+
+{% endblock %}

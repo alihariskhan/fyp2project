@@ -5,6 +5,18 @@ from guard import Guard
 from sql import db
 
 
+class Client_Guard_Reservation_History(db.Model):
+    __tablename__ = 'client_guard_reservation_history'
+    id = db.Column(db.Integer, primary_key=True)
+    client_id = db.Column(db.Integer, db.ForeignKey('client.client_id'))
+    guard_id = db.Column(db.Integer, db.ForeignKey('guard.guard_id'))
+    reservation_id = db.Column(db.Integer, db.ForeignKey('guard_reservation.reservation_id'))
+    location_id = db.Column(db.Integer, db.ForeignKey('location_details.location_id'))
+    duty_shift = db.Column(db.String, nullable=False)
+    start_time = db.Column(db.Time, nullable=False)
+    end_time = db.Column(db.Time, nullable=False)
+
+
 class Client_Guard_Reservation(db.Model):
     __tablename__ = 'client_guard_reservation'
     id = db.Column(db.Integer, primary_key=True)

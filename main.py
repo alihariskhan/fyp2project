@@ -1,9 +1,9 @@
 from datetime import datetime
 
-from MySQLdb._exceptions import IntegrityError
-from flask import Flask, render_template, redirect, Response, request
+from flask import Flask, render_template, redirect, Response, request, jsonify
 from flask_login import LoginManager, login_required, logout_user, current_user
 from sqlalchemy import func
+from apscheduler.schedulers.background import BackgroundScheduler
 
 from admin import Admin
 # classes import
@@ -16,24 +16,26 @@ from interview import Interview, Interview_History
 from client import Client
 from client_delete import Client_delete
 from client_guard_reservation import Client_Guard_Reservation
-
+from guard_schedule import Guard_Schedule
 from guard import Guard
 from guard_attendance import GuardAttendance
 from guard_reservation import Guard_reservation
 from incident_report import Incident_Report
 from interview_call import Interview_call
 from job_application import Job_application, Job_application_History
-from location_details import location_Details
 from login import Login
-from schedule import Schedule
+from reservations import Reservations
 from set_reservation_details import Set_Reservation_Details
 from setinterviewdate import Call_interviewDate
+from location_details import location_Details
 from sql import db
 from supervisor import Supervisor
 from supervisor_register import Supervisor_register
 from rejection_history import Rejection_History
+from gps_tracking import Gps_Tracking
 
 app = Flask(__name__)
+scheduler = BackgroundScheduler()
 app.config['SQLALCHEMY_DATABASE_URI'] = "mysql://root:@localhost/fyp2"
 app.config['SECRET_KEY'] = 'ali72377'
 db.init_app(app)
@@ -68,11 +70,155 @@ def fetch_dashboard_data(admin_id, admin_name):
     return data
 
 
-@app.before_request
-def truncate_tables():
-    obj = Rejection_History()
-    result = obj.truncate()
+# def truncate_tables():
+#     obj = Rejection_History()
+#     result = obj.truncate()
+#     return result
+#
+#
+# scheduler.add_job(truncate_tables, 'interval', minutes=5)
+#
+#
+# def reservation_end():
+#     obj = reservations()
+#     result = obj.reservation_end()
+#     return result
+#
+#
+# scheduler.add_job(reservation_end, 'interval', minutes=5)
+#
+#
+# def payment_cancel():
+#     obj = reservations()
+#     result = obj.payment_cancel()
+#     return result
+#
+#
+# scheduler.add_job(payment_cancel, 'interval', minutes=5)
+
+
+@app.route('/get_location', methods=['GET'])
+def get_guard_location():
+    try:
+        # Get the selected guard ID from the request parameters
+        selected_guard_id = request.args.get('guard_id')
+
+        if selected_guard_id is not None:
+            # Query the specific guard location from the database
+            guard = Gps_Tracking.query.filter_by(guard_id=selected_guard_id).first()
+
+            # If the guard is found, return its location
+            if guard is not None:
+                guard_data = {'guard_id': guard.guard_id, 'latitude': guard.latitude, 'longitude': guard.longitude}
+                return jsonify(guard_data)
+
+        # Return an empty response if no guard is selected or found
+        return jsonify({})
+
+    except Exception as e:
+        # Handle exceptions, log, or return an error response
+        print(f"Error fetching guard location: {str(e)}")
+        return jsonify({'error': 'Internal Server Error'}), 500
+
+
+@app.route("/gps_tracking", methods=['POST', 'GET'])
+@login_required
+def gps_tracking():
+    client_id_exist = Client.query.filter_by(client_id=current_user.client_id).first()
+    if client_id_exist:
+        guards = (db.session.query(Client_Guard_Reservation, Guard)
+                  .select_from(Client_Guard_Reservation)
+                  .join(Guard, Client_Guard_Reservation.guard_id == Guard.guard_id)
+                  .filter(Client_Guard_Reservation.client_id == current_user.client_id)
+                  )
+        return render_template("gps_tracking.html", guards=guards)
+    else:
+        return "Access Denied!"
+
+
+@app.route("/guard_cancel/<string:_id>")
+def guard_cancel(_id):
+    obj = Reservations()
+    result = obj.guard_cancel(_id)
     return result
+
+
+@app.route("/guard_cancel_page")
+def guard_cancel_page():
+    guard_cancel = (
+        db.session.query(Client_Guard_Reservation, Guard_reservation, Client, location_Details, Guard)
+        .select_from(Client_Guard_Reservation)
+        .join(Guard_reservation, Client_Guard_Reservation.reservation_id == Guard_reservation.reservation_id)
+        .join(Client, Client_Guard_Reservation.client_id == Client.client_id)
+        .join(location_Details, location_Details.location_id == Client_Guard_Reservation.location_id)
+        .join(Guard, Client_Guard_Reservation.guard_id == Guard.guard_id)
+        .filter(Guard_reservation.payment == True)
+        .filter(Client.client_id == current_user.client_id)
+    )
+    return render_template("guard_cancel_page.html", guard_cancel=guard_cancel)
+
+
+@app.route("/cancel_reservation/<string:_id>")
+def cancel_reservation(_id):
+    obj = Reservations()
+    obj.cancel_reservation(_id)
+    return redirect("/cancel_reservation_page")
+
+
+@app.route("/cancel_reservation_page")
+@login_required
+def cancel_reservation_page():
+    client_id_exist = Client.query.filter_by(client_id=current_user.client_id).first()
+    if client_id_exist:
+        reservation = (
+            db.session.query(Client_Guard_Reservation, Guard_reservation, Client, location_Details, Guard)
+            .select_from(Client_Guard_Reservation)
+            .join(Guard_reservation, Client_Guard_Reservation.reservation_id == Guard_reservation.reservation_id)
+            .join(Client, Client_Guard_Reservation.client_id == Client.client_id)
+            .join(location_Details, location_Details.location_id == Client_Guard_Reservation.location_id)
+            .join(Guard, Client_Guard_Reservation.guard_id == Guard.guard_id)
+            .filter(Guard_reservation.payment == True)
+            .filter(Client.client_id == current_user.client_id)
+        )
+        return render_template("cancel_reservation_page.html", reservation=reservation)
+    else:
+        return "access denied"
+
+
+@app.route("/my_guard_schedule")
+@login_required
+def my_guard_schedule():
+    client_id_exist = Client.query.filter_by(client_id=current_user.client_id).first()
+    if client_id_exist:
+        obj = Guard_Schedule()
+        result = obj.my_guard_schedule()
+        return result
+    else:
+        return "access denied"
+
+
+@app.route("/guard_schedule")
+@login_required
+def guard_schedule():
+    supervisor_id_exist = Supervisor.query.filter_by(supervisor_id=current_user.supervisor_id).first()
+    if supervisor_id_exist:
+        obj = Guard_Schedule()
+        result = obj.guard_schedule()
+        return result
+    else:
+        return "access denied"
+
+
+@app.route("/show_reservation_details/<string:_id>")
+@login_required
+def show_reservation_details(_id):
+    supervisor_id_exist = Supervisor.query.filter_by(supervisor_id=current_user.supervisor_id).first()
+    if supervisor_id_exist:
+        obj = Reservations()
+        result = obj.show_reservation_details(_id)
+        return result
+    else:
+        return "access denied"
 
 
 @app.route("/clear_history")
@@ -211,12 +357,12 @@ def guard_reservation():
     return render_template("guards.html", guards=guards)
 
 
-# Route to set schedule
-@app.route("/guard_schedule")
+# Route to show reservations to supervisor
+@app.route("/reservations")
 @login_required
-def guard_schedule():
-    obj = Schedule()
-    result = obj.schedule()
+def reservations():
+    obj = Reservations()
+    result = obj.reservations()
     return result
 
 
@@ -443,36 +589,48 @@ def job_requests():
 @app.route("/supervisordashboard")
 @login_required
 def supervisor_dashboard():
-    return render_template("supervisordashboard.html")
+    supervisor_id_exist = Supervisor.query.filter_by(supervisor_id=current_user.supervisor_id).first()
+    if supervisor_id_exist:
+        return render_template("supervisordashboard.html")
+    else:
+        return "Access Denied!"
 
 
 @app.route('/client_dashboard')
 @login_required
 def client_dashboard():
-    return render_template('client_dashboard.html')
+    client_id_exist = Client.query.filter_by(client_id=current_user.client_id).first()
+    if client_id_exist:
+        return render_template('client_dashboard.html')
+    else:
+        return "Access Denied!"
 
 
 # Route of Admin Dashboard
 @app.route("/admindashboard")
 @login_required
 def admin_dashboard():
-    data = fetch_dashboard_data(current_user.admin_id, current_user.admin_name)
-    requests = (Job_application.query.filter_by(interview_request=False)
-                .order_by(Job_application.applicant_id.desc()).limit(10).all())
-    guard_count = Guard.query.count()
-    job_count = len(requests)
-    client_count = Client.query.count()
-    if guard_count < 1:
-        guard_count = 0
+    admin = Admin.query.filter_by(admin_id=current_user.admin_id).first()
+    if admin:
+        data = fetch_dashboard_data(current_user.admin_id, current_user.admin_name)
+        requests = (Job_application.query.filter_by(interview_request=False)
+                    .order_by(Job_application.applicant_id.desc()).limit(10).all())
+        guard_count = Guard.query.count()
+        job_count = len(requests)
+        client_count = Client.query.count()
+        if guard_count < 1:
+            guard_count = 0
 
-    if job_count < 1:
-        job_count = 0
+        if job_count < 1:
+            job_count = 0
 
-    if client_count < 1:
-        client_count = 0
+        if client_count < 1:
+            client_count = 0
 
-    return render_template("admindashboard.html", requests=requests, guard_count=guard_count, job_count=job_count,
-                           data=data, client_count=client_count)
+        return render_template("admindashboard.html", requests=requests, guard_count=guard_count, job_count=job_count,
+                               data=data, client_count=client_count)
+    else:
+        return "Access Denied!"
 
 
 # Route to apply for job
