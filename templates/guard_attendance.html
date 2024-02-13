@@ -1,187 +1,225 @@
-{% extends "navbar.html" %}
-{% block body %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guard Check-in System</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+    <!-- Leaflet CSS and JS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
 
-<!--  Body Wrapper -->
-  <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
-    data-sidebar-position="fixed" data-header-position="fixed">
-    <!-- Sidebar Start -->
-    <aside class="left-sidebar">
-      <!-- Sidebar scroll-->
-      <div>
-        <div class="brand-logo d-flex align-items-center justify-content-between">
-          <a href="/" class="text-nowrap logo-img">
-            <h1 STYLE="font-size:20px; font-weight:900; color:black;">SHAH SECURITY</h1>
-          </a>
-          <div class="close-btn d-xl-none d-block sidebartoggler cursor-pointer" id="sidebarCollapse">
-            <i class="ti ti-x fs-8"></i>
-          </div>
-        </div>
-        <!-- Sidebar navigation-->
-        <nav class="sidebar-nav scroll-sidebar" data-simplebar="">
-          <ul id="sidebarnav">
-            <li class="nav-small-cap">
-              <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
-              <span class="hide-menu">Home</span>
-            </li>
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="/" aria-expanded="false">
-                <span>
-                  <i class="ti ti-layout-dashboard"></i>
-                </span>
-                <span class="hide-menu">Website</span>
-              </a>
-            </li>
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="/supervisordashboard" aria-expanded="false">
-                <span>
-                  <i class="ti ti-layout-dashboard"></i>
-                </span>
-                <span class="hide-menu">Dashboard</span>
-              </a>
-            </li>
-            <li class="nav-small-cap">
-              <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
-              <span class="hide-menu">UI COMPONENTS</span>
-            </li>
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="/guard_attendance" aria-expanded="false">
-                <span>
-                  <i class="ti ti-article"></i>
-                </span>
-                <span class="hide-menu">Guard Attendance</span>
-              </a>
-            </li>
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="/admincalled" aria-expanded="false">
-                <span>
-                  <i class="ti ti-article"></i>
-                </span>
-                <span class="hide-menu">Call for Interview</span>
-              </a>
-            </li>
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="/guard_detail" aria-expanded="false">
-                <span>
-                  <i class="ti ti-article"></i>
-                </span>
-                <span class="hide-menu">Guards Detail</span>
-              </a>
-            </li>
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="/guard_schedule" aria-expanded="false">
-                <span>
-                  <i class="ti ti-article"></i>
-                </span>
-                <span class="hide-menu">Guard Schedule</span>
-              </a>
-            </li>
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="/schedule_detail" aria-expanded="false">
-                <span>
-                  <i class="ti ti-article"></i>
-                </span>
-                <span class="hide-menu">Schedule Details</span>
-              </a>
-            </li>
-            <li class="nav-small-cap">
-              <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
-              <span class="hide-menu">AUTH</span>
-            </li>
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="/supervisor/logout" aria-expanded="false">
-                <span>
-                  <i class="ti ti-login"></i>
-                </span>
-                <span class="hide-menu">Logout</span>
-              </a>
-            </li>
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="./authentication-register.html" aria-expanded="false">
-                <span>
-                  <i class="ti ti-user-plus"></i>
-                </span>
-                <span class="hide-menu">Register</span>
-              </a>
-            </li>
-          </ul>
-        </nav>
-        <!-- End Sidebar navigation -->
-      </div>
-      <!-- End Sidebar scroll-->
-    </aside>
-    <!--  Sidebar End -->
-    <!--  Main wrapper -->
-    <div class="body-wrapper">
-      <!--  Header Start -->
+</head>
+<body class="container mt-4">
 
-      <!--  Header End -->
-      <div class="container-fluid">
-        <div class="container-fluid">
-          <br><br>
-          <div class="card">
-           <form id="attendanceForm" class="form-inline justify-content-center mt-3">
-        <div class="form-group mx-sm-3 mb-2">
-            <label for="guardId" class="sr-only">Guard ID:</label>
-            <select class="form-control" id="guardId" name="guard_id" required>
-                {% for guard in guards %}
-                    <option value="{{ guard.guard_id }}">{{ guard.guard_id}}. {{ guard.guard_name }}</option>
-                {% endfor %}
-            </select>
-        </div>
-        <input type="datetime-local" name="checkintime" id="checkintime">
-        <button type="button" class="btn-primary mb-2" onclick="markAttendance('checkin')">Check-In</button>
-        <input type="datetime-local" name="checkouttime" id="checkouttime">
-        <button type="button" class="btn-success mb-2" onclick="markAttendance('checkout')">Check-Out</button>
-        <button type="button" class="btn-danger mb-2" onclick="markAttendance('absent')">Absent</button>
-    </form>
+<!-- Guard ID Dropdown -->
+<div class="form-group">
+    <label for="guardId">Guard ID:</label>
+    <select id="guardId" class="form-control select2">
+      {% for guard in guards %}
+        <option value="{{guard.guard_id}}">{{guard.guard_id}}.{{guard.guard_name}}</option>
+        <!-- Add more options as needed -->
+        {% endfor %}
+    </select>
+</div>
 
-    
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  
-  <script src="{{ url_for('static', filename='libs/bootstrap/dist/js/bootstrap.bundle.min.js') }}"></script>
-  <script src="{{ url_for('static', filename='js/sidebarmenu.js') }}"></script>
-  <script src="{{ url_for('static', filename='js/app.min.js') }}"></script>
-  <script src="{{ url_for('static', filename='libs/simplebar/dist/simplebar.js') }}"></script>
+<!-- Leaflet Map -->
+<div id="map" class="mb-4" style="height: 400px;"></div>
 
-  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<!-- Time Input Fields -->
+<div class="form-group">
+    <label for="checkInTime">Check-in Time:</label>
+    <input type="datetime-local" id="checkInTime" name="checkintime" class="form-control">
+</div>
 
-    <script>
-        function markAttendance(action) {
-            var guardId = document.getElementById('guardId').value;
-            var checkinTime = document.getElementById('checkintime').value;
-            var checkoutTime = document.getElementById('checkouttime').value;
+<div class="form-group">
+    <label for="checkOutTime">Check-out Time:</label>
+    <input type="datetime-local" id="checkOutTime" name="checkouttime" class="form-control">
+</div>
 
-            // Example AJAX using fetch:
-            fetch('/mark_attendance', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                body: 'guard_id=' + guardId + '&action=' + action + '&checkintime=' + checkinTime + '&checkouttime=' + checkoutTime,
-            })
-            .then(response => {
-                if (response.status === 200) {
-                    return response.text(); // Return the text representation of the response
-                } else {
-                    throw new Error('Error: ' + response.status);
+<!-- Buttons -->
+<button onclick="checkIn()" class="btn btn-primary mr-2">Check-in</button>
+<button onclick="markAbsent()" class="btn btn-warning mr-2">Absent</button>
+<button onclick="checkOut()" class="btn btn-success">Check-out</button>
+
+
+
+<script>
+  $(document).ready(function () {
+        $('.select2').select2({
+            placeholder: 'Select a guard',
+            allowClear: true,
+            closeOnSelect: true,
+            width: '100%', // Set the width of the dropdown to 100%
+        });
+        $('.select2').val(null).trigger('change');
+      });
+</script>
+
+<script>
+  // Initialize Leaflet map
+    // Initialize the Leaflet map
+        var map = L.map('map').setView([24.9225346, 67.0003668], 10);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+
+        var guardMarker;
+        var autoUpdate = false;
+
+        // Listen for changes in the Select2 dropdown
+        $('.select2').on('select2:select', function (e) {
+            // Get the selected guard
+            var selectedGuard = $(this).val();
+
+            // Update the map with the selected guard's location
+            updateGuardLocation(selectedGuard);
+            autoUpdate = true;
+        });
+
+        function updateGuardLocation(selectedGuard) {
+            // If no guard is selected, remove the existing marker and return
+            if (!selectedGuard) {
+                if (guardMarker) {
+                    map.removeLayer(guardMarker);
+                    guardMarker = null;
                 }
-            })
-            .then(message => {
-                alert(message); // Display the success message
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-                alert('An error occurred: ' + error.message); // Display the error message
-            });
+                return;
+            }
+
+            fetch('/get_location?guard_id=' + selectedGuard)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Guard location data:', data); // Log the response data
+
+                    // Remove the previous guard marker if exists
+                    if (guardMarker) {
+                        map.removeLayer(guardMarker);
+                    }
+
+                    if (data) {
+                        var location = data;
+                        guardMarker = L.marker([location.latitude, location.longitude])
+                            .bindPopup('Guard ID: ' + location.guard_id)
+                            .addTo(map);
+
+                        // Fly to the marker's location
+                        map.flyTo([location.latitude, location.longitude], 18);
+
+                        console.log('Latitude:', location.latitude, 'Longitude:', location.longitude);
+
+                        // Set start_time and stop_time values to input fields
+                        var checkInTimeInput = document.getElementById("checkInTime");
+                        var checkOutTimeInput = document.getElementById("checkOutTime");
+
+                        // Parse the server date strings
+                        var startTime = new Date(location.start_time);
+                        var stopTime = new Date(location.stop_time);
+
+                        // Format the time strings for mm/dd/yyyy hh:mm:ss format
+                        var formattedCheckInTime = formatDate(startTime);
+                        var formattedCheckOutTime = formatDate(stopTime);
+
+                        function formatDate(date) {
+                            var year = date.getFullYear();
+                            var month = (date.getMonth() + 1).toString().padStart(2, '0');
+                            var day = date.getDate().toString().padStart(2, '0');
+                            var hours = date.getHours().toString().padStart(2, '0');
+                            var minutes = date.getMinutes().toString().padStart(2, '0');
+
+                            return year + '-' + month + '-' + day + 'T' + hours + ':' + minutes;
+                        }
+
+                        // Set values after removing existing options
+                        checkInTimeInput.value = '';
+                        checkOutTimeInput.value = '';
+
+                        setTimeout(function () {
+                            checkInTimeInput.value = formattedCheckInTime;
+                            checkOutTimeInput.value = formattedCheckOutTime;
+                        }, 0);
+
+
+                    }
+                })
+                .catch(error => console.error('Error fetching guard location:', error));
         }
-    </script>
+  
+</script>
+
+<script>
+
+   // Function to handle check-in button click
+async function checkIn() {
+    var guardId = document.getElementById("guardId").value;
+    var checkInTime = document.getElementById("checkInTime").value;
+
+    try {
+        var response = await $.ajax({
+            type: 'POST',
+            url: '/mark_attendance',
+            data: { guard_id: guardId, action: 'checkin', checkintime: checkInTime }
+        });
+
+        console.log(response);
+        showAlert("Check-in recorded for Guard ID: " + guardId);
+    } catch (error) {
+        console.error('Error:', error);
+    }
+}
+
+// Function to handle absent button click
+async function markAbsent() {
+    var guardId = document.getElementById("guardId").value;
+
+    try {
+        var response = await $.ajax({
+            type: 'POST',
+            url: '/mark_attendance',
+            data: { guard_id: guardId, action: 'absent' }
+        });
+
+        console.log(response);
+        showAlert("Guard ID: " + guardId + " marked as absent");
+    } catch (error) {
+        console.error('Error:', error);
+    }
+}
+
+// Function to handle check-out button click
+async function checkOut() {
+    var guardId = document.getElementById("guardId").value;
+    var checkOutTime = document.getElementById("checkOutTime").value;
+
+    try {
+        var response = await $.ajax({
+            type: 'POST',
+            url: '/mark_attendance',
+            data: { guard_id: guardId, action: 'checkout', checkouttime: checkOutTime }
+        });
+
+        console.log(response);
+        showAlert("Check-out recorded for Guard ID: " + guardId);
+    } catch (error) {
+        console.error('Error:', error);
+    }
+}
+
+// Function to show alert message
+function showAlert(message) {
+    alert(message);
+}
+
+</script>
 
 
-{% endblock %}
+</body>
+</html>

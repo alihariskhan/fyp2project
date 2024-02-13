@@ -12,7 +12,6 @@ class GuardAttendance(db.Model):
     guard_id = db.Column(db.Integer, nullable=False)
     absent = db.Column(db.Boolean, default=False)
 
-
     def mark_attendance(self):
         try:
             if request.method == 'POST':
@@ -22,7 +21,6 @@ class GuardAttendance(db.Model):
                 guard = Guard.query.get(guard_id)
 
                 if guard:
-
 
                     if action == 'absent':
                         # Check if there's existing attendance for the guard on the current day

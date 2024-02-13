@@ -1,5 +1,5 @@
 /*
-SQLyog Community v13.2.1 (64 bit)
+SQLyog Ultimate v13.1.1 (64 bit)
 MySQL - 10.4.32-MariaDB : Database - fyp2
 *********************************************************************
 */
@@ -74,9 +74,13 @@ CREATE TABLE `client_guard_reservation` (
   CONSTRAINT `client_guard_reservation_ibfk_4` FOREIGN KEY (`location_id`) REFERENCES `location_details` (`location_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `client_guard_reservation_ibfk_5` FOREIGN KEY (`reservation_id`) REFERENCES `guard_reservation` (`reservation_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `client_guard_reservation_ibfk_6` FOREIGN KEY (`client_id`) REFERENCES `client` (`client_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `client_guard_reservation` */
+
+insert  into `client_guard_reservation`(`id`,`client_id`,`reservation_id`,`guard_id`,`location_id`,`duty_shift`,`start_time`,`end_time`) values 
+(5,1001,2,8001,14,'morning','12:45:00','00:48:00'),
+(6,1001,2,8002,14,'morning','12:45:00','00:48:00');
 
 /*Table structure for table `client_guard_reservation_history` */
 
@@ -112,6 +116,7 @@ insert  into `client_guard_reservation_history`(`id`,`client_id`,`reservation_id
 DROP TABLE IF EXISTS `gps_tracking`;
 
 CREATE TABLE `gps_tracking` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `guard_id` int(11) DEFAULT NULL,
   `latitude` double DEFAULT NULL,
   `longitude` double DEFAULT NULL,
@@ -119,12 +124,16 @@ CREATE TABLE `gps_tracking` (
   `start_long` double DEFAULT NULL,
   `start_time` datetime DEFAULT NULL,
   `stop_time` datetime DEFAULT NULL,
-  `loop` tinyint(1) DEFAULT 0,
+  PRIMARY KEY (`id`),
   KEY `guard_id` (`guard_id`),
   CONSTRAINT `gps_tracking_ibfk_1` FOREIGN KEY (`guard_id`) REFERENCES `guard` (`guard_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `gps_tracking` */
+
+insert  into `gps_tracking`(`id`,`guard_id`,`latitude`,`longitude`,`start_lat`,`start_long`,`start_time`,`stop_time`) values 
+(1,8001,24.9223404,67.0003766,24.9223388,67.0003677,'2024-02-12 11:58:47','2024-02-12 11:58:49'),
+(2,8002,24.9223292,67.0003692,24.9223423,67.0003692,'2024-02-12 11:59:02','2024-02-12 11:59:10');
 
 /*Table structure for table `guard` */
 
@@ -145,9 +154,9 @@ CREATE TABLE `guard` (
 /*Data for the table `guard` */
 
 insert  into `guard`(`guard_id`,`guard_name`,`guard_phone`,`guard_cnic`,`guard_email`,`date`,`experience`,`password`) values 
-(8001,'umar','03012525252','42000','umar@gmail.com','2023-11-14','5',NULL),
-(8002,'shazil','03012525252','42000','umar@gmail.com','2017-11-16','2',NULL),
-(8003,'hasan','03012525252','42000','umar@gmail.com','2020-11-04','5',NULL),
+(8001,'umar','03012525252','42000','umar@gmail.com','2023-11-14','5','guard'),
+(8002,'shazil','03012525252','42000','umar@gmail.com','2017-11-16','2','guard'),
+(8003,'hasan','03012525252','42000','umar@gmail.com','2020-11-04','5','guard'),
 (8004,'abid','03012525252','42000','umar@gmail.com','2020-11-04','3',NULL),
 (8005,'john','02132523254','42000','umar@gmail.com','2020-11-04','1',NULL),
 (8006,'sahil','02532512541','12546','sahil@gmail.com','2017-11-16','10',NULL),
@@ -175,7 +184,8 @@ CREATE TABLE `guard_attendance` (
 /*Data for the table `guard_attendance` */
 
 insert  into `guard_attendance`(`attendance_id`,`guard_id`,`checkin_time`,`checkout_time`,`absent`) values 
-(1,8004,'2023-11-30 11:14:00',NULL,0);
+(1,8002,'2024-02-13 12:30:00','2024-02-13 18:30:00',0),
+(2,8007,NULL,NULL,1);
 
 /*Table structure for table `guard_reservation` */
 
@@ -189,9 +199,12 @@ CREATE TABLE `guard_reservation` (
   `schedule_details` text DEFAULT NULL,
   `payment` tinyint(1) DEFAULT 0,
   PRIMARY KEY (`reservation_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `guard_reservation` */
+
+insert  into `guard_reservation`(`reservation_id`,`res_datetime`,`start_date`,`end_date`,`schedule_details`,`payment`) values 
+(2,'2024-02-13 12:45:53','2024-02-13','2024-02-23','extra details',0);
 
 /*Table structure for table `guard_reservation_history` */
 
@@ -350,25 +363,28 @@ DROP TABLE IF EXISTS `location_details`;
 CREATE TABLE `location_details` (
   `location_id` int(11) NOT NULL AUTO_INCREMENT,
   `location` text DEFAULT NULL,
+  `latitude` double DEFAULT NULL,
+  `longitude` double DEFAULT NULL,
   PRIMARY KEY (`location_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `location_details` */
 
-insert  into `location_details`(`location_id`,`location`) values 
-(1,'iqra'),
-(2,'university'),
-(3,'main campus'),
-(4,'iqra'),
-(5,'university'),
-(6,'iqra uni'),
-(7,'University'),
-(8,'abc location'),
-(9,'iqra'),
-(10,'abc location'),
-(11,'university'),
-(12,'shahra-e-faisal'),
-(13,'xyz location');
+insert  into `location_details`(`location_id`,`location`,`latitude`,`longitude`) values 
+(1,'iqra',NULL,NULL),
+(2,'university',NULL,NULL),
+(3,'main campus',NULL,NULL),
+(4,'iqra',NULL,NULL),
+(5,'university',NULL,NULL),
+(6,'iqra uni',NULL,NULL),
+(7,'University',NULL,NULL),
+(8,'abc location',NULL,NULL),
+(9,'iqra',NULL,NULL),
+(10,'abc location',NULL,NULL),
+(11,'university',NULL,NULL),
+(12,'shahra-e-faisal',NULL,NULL),
+(13,'xyz location',NULL,NULL),
+(14,'iqra university main campus karachi',NULL,NULL);
 
 /*Table structure for table `schedule` */
 

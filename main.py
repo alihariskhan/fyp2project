@@ -109,7 +109,9 @@ def get_guard_location():
 
             # If the guard is found, return its location
             if guard is not None:
-                guard_data = {'guard_id': guard.guard_id, 'latitude': guard.latitude, 'longitude': guard.longitude}
+                guard_data = {'guard_id': guard.guard_id, 'latitude': guard.start_lat, 'longitude': guard.start_long,
+                              'start_time': guard.start_time, 'stop_time': guard.stop_time
+                              }
                 return jsonify(guard_data)
 
         # Return an empty response if no guard is selected or found
