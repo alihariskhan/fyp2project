@@ -32,7 +32,7 @@ from sql import db
 from supervisor import Supervisor
 from supervisor_register import Supervisor_register
 from rejection_history import Rejection_History
-from gps_tracking import Gps_Tracking
+from Get_location import Get_Location
 
 app = Flask(__name__)
 scheduler = BackgroundScheduler()
@@ -99,28 +99,9 @@ def fetch_dashboard_data(admin_id, admin_name):
 
 @app.route('/get_location', methods=['GET'])
 def get_guard_location():
-    try:
-        # Get the selected guard ID from the request parameters
-        selected_guard_id = request.args.get('guard_id')
-
-        if selected_guard_id is not None:
-            # Query the specific guard location from the database
-            guard = Gps_Tracking.query.filter_by(guard_id=selected_guard_id).first()
-
-            # If the guard is found, return its location
-            if guard is not None:
-                guard_data = {'guard_id': guard.guard_id, 'latitude': guard.start_lat, 'longitude': guard.start_long,
-                              'start_time': guard.start_time, 'stop_time': guard.stop_time
-                              }
-                return jsonify(guard_data)
-
-        # Return an empty response if no guard is selected or found
-        return jsonify({})
-
-    except Exception as e:
-        # Handle exceptions, log, or return an error response
-        print(f"Error fetching guard location: {str(e)}")
-        return jsonify({'error': 'Internal Server Error'}), 500
+    obj = Get_Location()
+    result = obj.get_location()
+    return result
 
 
 @app.route("/gps_tracking", methods=['POST', 'GET'])

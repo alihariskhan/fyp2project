@@ -29,7 +29,11 @@
 </div>
 
 <!-- Leaflet Map -->
-<div id="map" class="mb-4" style="height: 400px;"></div>
+<div id="map" class="mb-4" style="height: 200px;"></div>
+
+<div class="form-group">
+  <h3 id="location_address">Select any Guard</h3>
+</div>
 
 <!-- Time Input Fields -->
 <div class="form-group">
@@ -69,6 +73,10 @@
 
         var guardMarker;
         var autoUpdate = false;
+        // Set start_time and stop_time values to input fields
+        var checkInTimeInput = document.getElementById("checkInTime");
+        var checkOutTimeInput = document.getElementById("checkOutTime");
+        var location_address = document.getElementById("location_address");
 
         // Listen for changes in the Select2 dropdown
         $('.select2').on('select2:select', function (e) {
@@ -87,8 +95,16 @@
                     map.removeLayer(guardMarker);
                     guardMarker = null;
                 }
+                location_address.textContent = ''; // Clear location address
+                checkInTimeInput.value = '';
+                checkOutTimeInput.value = '';
                 return;
             }
+
+            // Clear the values explicitly before fetching new data
+            location_address.textContent = '';
+            checkInTimeInput.value = '';
+            checkOutTimeInput.value = '';
 
             fetch('/get_location?guard_id=' + selectedGuard)
                 .then(response => {
@@ -105,22 +121,11 @@
                         map.removeLayer(guardMarker);
                     }
 
-                    if (data) {
-                        var location = data;
-                        guardMarker = L.marker([location.latitude, location.longitude])
-                            .bindPopup('Guard ID: ' + location.guard_id)
-                            .addTo(map);
+                    
 
-                        // Fly to the marker's location
-                        map.flyTo([location.latitude, location.longitude], 18);
-
-                        console.log('Latitude:', location.latitude, 'Longitude:', location.longitude);
-
-                        // Set start_time and stop_time values to input fields
-                        var checkInTimeInput = document.getElementById("checkInTime");
-                        var checkOutTimeInput = document.getElementById("checkOutTime");
-
-                        // Parse the server date strings
+                  if (data) {
+                    var location = data;
+                    // Parse the server date strings
                         var startTime = new Date(location.start_time);
                         var stopTime = new Date(location.stop_time);
 
@@ -138,16 +143,38 @@
                             return year + '-' + month + '-' + day + 'T' + hours + ':' + minutes;
                         }
 
-                        // Set values after removing existing options
-                        checkInTimeInput.value = '';
-                        checkOutTimeInput.value = '';
+                        
+                        // Check if location data is available
+                        if (location.location) {
+                            location_address.textContent = 'Duty Location: ' + location.location;
+                        }else {
+                            location_address.textContent = 'Duty Location: Not set'; // Clear checkin time
+                        }
 
-                        setTimeout(function () {
+                        // Check if start_time is available
+                        if (location.start_time) {
                             checkInTimeInput.value = formattedCheckInTime;
+                        } else {
+                            checkInTimeInput.value = ''; // Clear checkin time
+                        }
+
+                        // Check if stop_time is available
+                        if (location.stop_time) {
                             checkOutTimeInput.value = formattedCheckOutTime;
-                        }, 0);
+                        } else {
+                            checkOutTimeInput.value = ''; // Clear checkout time
+                        }
+                  }
 
+                  if (data) {
+                        var location = data;
+                        guardMarker = L.marker([location.start_lat, location.start_long])
+                            .bindPopup('Guard ID: ' + location.guard_id)
+                            .addTo(map);
 
+                        // Fly to the marker's location
+                        map.flyTo([location.start_lat, location.start_long], 18);
+  
                     }
                 })
                 .catch(error => console.error('Error fetching guard location:', error));

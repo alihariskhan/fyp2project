@@ -51,11 +51,19 @@ class GuardAttendance(db.Model):
                         existing_attendance = GuardAttendance.query.filter(
                             GuardAttendance.absent == True).first()
 
+                        existing_guard = GuardAttendance.query.filter(GuardAttendance.guard_id == guard_id).first()
+
                         if existing_attendance:
                             # Update the existing entry to record the check-in time
                             checkintime = request.form.get('checkintime')
                             existing_attendance.checkin_time = checkintime
                             existing_attendance.absent = False  # Set absent to False when check-in is recorded
+                            db.session.commit()
+                            return Response(f'Check-in recorded for {guard.guard_name}', status=200,
+                                            content_type='text/plain')
+                        elif existing_guard:
+                            checkintime = request.form.get('checkintime')
+                            existing_guard.checkin_time = checkintime
                             db.session.commit()
                             return Response(f'Check-in recorded for {guard.guard_name}', status=200,
                                             content_type='text/plain')
