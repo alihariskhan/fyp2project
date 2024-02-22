@@ -9,6 +9,7 @@ class Guard_reservation(db.Model):
     end_date = db.Column(db.Date, nullable=True)
     schedule_details = db.Column(db.String, nullable=True)
     payment = db.Column(db.Boolean, nullable=False, default=False)
+    days = db.Column(db.Integer)
 
 
 class Guard_reservation_history(db.Model):

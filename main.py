@@ -33,6 +33,7 @@ from supervisor import Supervisor
 from supervisor_register import Supervisor_register
 from rejection_history import Rejection_History
 from Get_location import Get_Location
+from invoice import Invoice
 
 app = Flask(__name__)
 scheduler = BackgroundScheduler()
@@ -95,6 +96,13 @@ def fetch_dashboard_data(admin_id, admin_name):
 #
 #
 # scheduler.add_job(payment_cancel, 'interval', minutes=5)
+
+
+@app.route('/invoice')
+def invoice():
+    obj = Invoice()
+    result = obj.invoice()
+    return result
 
 
 @app.route('/get_location', methods=['GET'])

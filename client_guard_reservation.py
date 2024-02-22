@@ -27,6 +27,7 @@ class Client_Guard_Reservation(db.Model):
     duty_shift = db.Column(db.String, nullable=False)
     start_time = db.Column(db.Time, nullable=False)
     end_time = db.Column(db.Time, nullable=False)
+    hours = db.Column(db.Double)
 
     def guard_select(self, _id):
         try:

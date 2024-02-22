@@ -65,6 +65,7 @@ CREATE TABLE `client_guard_reservation` (
   `duty_shift` varchar(50) DEFAULT NULL,
   `start_time` time DEFAULT NULL,
   `end_time` time DEFAULT NULL,
+  `hours` double DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `guard_id` (`guard_id`),
   KEY `location_id` (`location_id`),
@@ -74,13 +75,9 @@ CREATE TABLE `client_guard_reservation` (
   CONSTRAINT `client_guard_reservation_ibfk_4` FOREIGN KEY (`location_id`) REFERENCES `location_details` (`location_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `client_guard_reservation_ibfk_5` FOREIGN KEY (`reservation_id`) REFERENCES `guard_reservation` (`reservation_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `client_guard_reservation_ibfk_6` FOREIGN KEY (`client_id`) REFERENCES `client` (`client_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `client_guard_reservation` */
-
-insert  into `client_guard_reservation`(`id`,`client_id`,`reservation_id`,`guard_id`,`location_id`,`duty_shift`,`start_time`,`end_time`) values 
-(5,1001,2,8001,14,'morning','12:45:00','00:48:00'),
-(6,1001,2,8002,14,'morning','12:45:00','00:48:00');
 
 /*Table structure for table `client_guard_reservation_history` */
 
@@ -127,13 +124,13 @@ CREATE TABLE `gps_tracking` (
   PRIMARY KEY (`id`),
   KEY `guard_id` (`guard_id`),
   CONSTRAINT `gps_tracking_ibfk_1` FOREIGN KEY (`guard_id`) REFERENCES `guard` (`guard_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `gps_tracking` */
 
 insert  into `gps_tracking`(`id`,`guard_id`,`latitude`,`longitude`,`start_lat`,`start_long`,`start_time`,`stop_time`) values 
 (1,8001,24.9223404,67.0003766,24.9223388,67.0003677,'2024-02-12 11:58:47','2024-02-12 11:58:49'),
-(2,8002,24.9223292,67.0003692,24.9223423,67.0003692,'2024-02-12 11:59:02','2024-02-12 11:59:10');
+(2,8002,24.9223292,67.0003692,24.9223423,67.0003692,'2024-02-12 11:59:02','0000-00-00 00:00:00');
 
 /*Table structure for table `guard` */
 
@@ -179,13 +176,14 @@ CREATE TABLE `guard_attendance` (
   PRIMARY KEY (`attendance_id`),
   KEY `guard_id` (`guard_id`),
   CONSTRAINT `guard_attendance_ibfk_1` FOREIGN KEY (`guard_id`) REFERENCES `guard` (`guard_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `guard_attendance` */
 
 insert  into `guard_attendance`(`attendance_id`,`guard_id`,`checkin_time`,`checkout_time`,`absent`) values 
 (1,8002,'2024-02-13 12:30:00','2024-02-13 18:30:00',0),
-(2,8007,NULL,NULL,1);
+(4,8001,'2024-02-12 16:58:00','2024-02-12 16:58:00',0),
+(9,8007,'2024-02-13 07:48:00','0000-00-00 00:00:00',0);
 
 /*Table structure for table `guard_reservation` */
 
@@ -198,13 +196,11 @@ CREATE TABLE `guard_reservation` (
   `end_date` date DEFAULT NULL,
   `schedule_details` text DEFAULT NULL,
   `payment` tinyint(1) DEFAULT 0,
+  `days` int(11) DEFAULT NULL,
   PRIMARY KEY (`reservation_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `guard_reservation` */
-
-insert  into `guard_reservation`(`reservation_id`,`res_datetime`,`start_date`,`end_date`,`schedule_details`,`payment`) values 
-(2,'2024-02-13 12:45:53','2024-02-13','2024-02-23','extra details',0);
 
 /*Table structure for table `guard_reservation_history` */
 
@@ -314,6 +310,21 @@ CREATE TABLE `interview_history` (
 
 /*Data for the table `interview_history` */
 
+/*Table structure for table `invoice` */
+
+DROP TABLE IF EXISTS `invoice`;
+
+CREATE TABLE `invoice` (
+  `invoice_id` int(11) NOT NULL,
+  `reservation_id` int(11) DEFAULT NULL,
+  `datetime` datetime DEFAULT NULL,
+  PRIMARY KEY (`invoice_id`),
+  KEY `reservation_id` (`reservation_id`),
+  CONSTRAINT `invoice_ibfk_1` FOREIGN KEY (`reservation_id`) REFERENCES `guard_reservation` (`reservation_id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+/*Data for the table `invoice` */
+
 /*Table structure for table `job_application` */
 
 DROP TABLE IF EXISTS `job_application`;
@@ -366,7 +377,7 @@ CREATE TABLE `location_details` (
   `latitude` double DEFAULT NULL,
   `longitude` double DEFAULT NULL,
   PRIMARY KEY (`location_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `location_details` */
 
@@ -384,7 +395,15 @@ insert  into `location_details`(`location_id`,`location`,`latitude`,`longitude`)
 (11,'university',NULL,NULL),
 (12,'shahra-e-faisal',NULL,NULL),
 (13,'xyz location',NULL,NULL),
-(14,'iqra university main campus karachi',NULL,NULL);
+(14,'iqra university main campus karachi',NULL,NULL),
+(15,'E-1 st-8 block 4 metroville',NULL,NULL),
+(16,'E-1 st-8 block 4 metroville',NULL,NULL),
+(17,'iqra uni',NULL,NULL),
+(18,'iqra uni',NULL,NULL),
+(19,'iqra university main campus karachi',NULL,NULL),
+(20,'iqra uni',NULL,NULL),
+(21,'iqra uni',NULL,NULL),
+(22,'Eiffel Tower',NULL,NULL);
 
 /*Table structure for table `schedule` */
 

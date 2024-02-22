@@ -56,10 +56,16 @@ class Set_Reservation_Details:
                 db.session.add(entry)
                 db.session.commit()
 
+                start_date = form_data['start_date']
+                end_date = form_data['end_date']
+
+                difference = day_calculate(start_date, end_date)
+
                 entry_guard_reservation = Guard_reservation(res_datetime=datetime.now(),
-                                                            start_date=form_data['start_date'],
-                                                            end_date=form_data['end_date'],
-                                                            schedule_details=form_data['schedule_details'])
+                                                            start_date=start_date,
+                                                            end_date=end_date,
+                                                            schedule_details=form_data['schedule_details'],
+                                                            days=difference)
                 db.session.add(entry_guard_reservation)
                 db.session.commit()
 
@@ -69,9 +75,14 @@ class Set_Reservation_Details:
                             .filter(Client_Guard_Reservation.reservation_id.is_(None))).all()
 
                 for request_entry in requests:
+                    start_time = form_data['start_time']
+                    end_time = form_data['end_time']
+                    time_difference = time_calculate(start_time, end_time)
+
                     request_entry.duty_shift = form_data['duty_shift']
-                    request_entry.start_time = form_data['start_time']
-                    request_entry.end_time = form_data['end_time']
+                    request_entry.start_time = start_time
+                    request_entry.end_time = end_time
+                    request_entry.hours = time_difference
                     db.session.commit()
 
                 # Retrieve the generated ids
@@ -99,11 +110,15 @@ class Set_Reservation_Details:
                 return '{"success": true}'
 
             elif condition2:
+                start_date = form_data['start_date']
+                end_date = form_data['end_date']
+                difference = day_calculate(start_date, end_date)
 
                 entry_guard_reservation = Guard_reservation(res_datetime=datetime.now(),
-                                                            start_date=form_data['start_date'],
-                                                            end_date=form_data['end_date'],
-                                                            schedule_details=form_data['schedule_details'])
+                                                            start_date=start_date,
+                                                            end_date=end_date,
+                                                            schedule_details=form_data['schedule_details'],
+                                                            days=difference)
                 db.session.add(entry_guard_reservation)
                 db.session.commit()
 
@@ -113,9 +128,14 @@ class Set_Reservation_Details:
                             .filter(Client_Guard_Reservation.reservation_id.is_(None))).all()
 
                 for request_entry in requests:
+                    start_time = form_data['start_time']
+                    end_time = form_data['end_time']
+                    time_difference = time_calculate(start_time, end_time)
+
                     request_entry.duty_shift = form_data['duty_shift']
-                    request_entry.start_time = form_data['start_time']
-                    request_entry.end_time = form_data['end_time']
+                    request_entry.start_time = start_time
+                    request_entry.end_time = end_time
+                    request_entry.hours = time_difference
                     db.session.commit()
 
                 distinct_guard_ids = (Client_Guard_Reservation.query
@@ -166,10 +186,16 @@ class Set_Reservation_Details:
                 db.session.add(entry)
                 db.session.commit()
 
+                start_date = form_data['start_date']
+                end_date = form_data['end_date']
+
+                difference = day_calculate(start_date, end_date)
+
                 entry_guard_reservation = Guard_reservation(res_datetime=datetime.now(),
-                                                            start_date=form_data['start_date'],
-                                                            end_date=form_data['end_date'],
-                                                            schedule_details=form_data['schedule_details'])
+                                                            start_date=start_date,
+                                                            end_date=end_date,
+                                                            schedule_details=form_data['schedule_details'],
+                                                            days=difference)
 
                 db.session.add(entry_guard_reservation)
                 db.session.commit()
@@ -188,10 +214,12 @@ class Set_Reservation_Details:
                     duty_end_time = request.form.get(f'{guard_id}_duty_end_time')
 
                     requests = Client_Guard_Reservation.query.filter_by(guard_id=guard_id).first()
+                    time_difference = time_calculate(duty_start_time, duty_end_time)
 
                     requests.duty_shift = duty_shift
                     requests.start_time = duty_start_time
                     requests.end_time = duty_end_time
+                    requests.hours = time_difference
                     db.session.commit()
 
                 # Retrieve the generated ids
@@ -241,10 +269,12 @@ class Set_Reservation_Details:
                     location = request.form.get(f'{guard_id}_location')
 
                     requests = Client_Guard_Reservation.query.filter_by(guard_id=guard_id).first()
+                    time_difference = time_calculate(duty_start_time, duty_end_time)
 
                     requests.duty_shift = duty_shift
                     requests.start_time = duty_start_time
                     requests.end_time = duty_end_time
+                    requests.hours = time_difference
                     db.session.commit()
 
                     entry = location_Details(location=location)
@@ -254,8 +284,11 @@ class Set_Reservation_Details:
                     requests.location_id = entry.location_id
                     db.session.commit()
 
+                difference = day_calculate(start_date, end_date)
+
                 entry = Guard_reservation(res_datetime=datetime.now(), start_date=start_date, end_date=end_date,
-                                          schedule_details=schedule_details)
+                                          schedule_details=schedule_details,
+                                          days=difference)
 
                 db.session.add(entry)
                 db.session.commit()
@@ -289,3 +322,31 @@ class Set_Reservation_Details:
             db.session.rollback()
             # Return a simple JSON-formatted string with the error
             return f'{{"success": false, "error": "{str(e)}"}}'
+
+
+def day_calculate(start_date, end_date):
+    if end_date == '':
+        return None
+    else:
+        start_date_str = start_date
+        end_date_str = end_date
+
+        start_date = datetime.strptime(start_date_str, '%Y-%m-%d')
+        end_date = datetime.strptime(end_date_str, '%Y-%m-%d')
+
+        difference = end_date - start_date
+        return difference
+
+
+def time_calculate(start_time, end_time):
+    start_time_str = start_time
+    end_time_str = end_time
+
+    start_time = datetime.strptime(start_time_str, '%H:%M')
+    end_time = datetime.strptime(end_time_str, '%H:%M')
+
+    result = (end_time - start_time).total_seconds() / 3600
+
+    time_difference = round(result, 2)
+    return time_difference
+
