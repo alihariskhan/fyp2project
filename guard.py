@@ -8,6 +8,8 @@ class Guard(db.Model):
     guard_email = db.Column(db.String, nullable=False)
     date = db.Column(db.String, nullable=False)
     experience = db.Column(db.String, nullable=False)
+    password = db.Column(db.String)
+    cost = db.Column(db.Double)
 
 
 
