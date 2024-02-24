@@ -1,0 +1,126 @@
+/* General Styles */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  width: 80%;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* Search Styles */
+.search-container {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+input[type="text"],
+button {
+  padding: 10px 15px;
+  margin: 5px;
+  border: none;
+  border-radius: 5px;
+  transition: all 0.3s ease;
+}
+
+input[type="text"] {
+  border: 1px solid #ccc;
+}
+
+button {
+  background-color:#E45F4E !important;
+  color: white;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #45a049;
+}
+
+input[type="text"]:hover,
+button:hover {
+  transform: scale(1.05);
+}
+
+/* Table Styles */
+.schedule {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.schedule caption {
+  font-size: 1.5em;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.schedule th,
+.schedule td {
+  padding: 12px;
+  text-align: center;
+  border: 1px solid #ddd;
+}
+
+.schedule th {
+  background-color: #f5f5f5;
+  font-weight: bold;
+}
+
+.schedule tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.schedule tr:hover {
+  background-color: #f1f1f1;
+}
+
+
+
+
+
+.schedule1 {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.schedule1 caption {
+  font-size: 1.5em;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.schedule1 th,
+.schedule td {
+  padding: 12px;
+  text-align: center;
+  border: 1px solid #ddd;
+}
+
+.schedule1 th {
+  background-color: #f5f5f5;
+  font-weight: bold;
+}
+
+.schedule1 tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.schedule1 tr:hover {
+  background-color: #f1f1f1;
+}
