@@ -75,9 +75,17 @@ CREATE TABLE `client_guard_reservation` (
   CONSTRAINT `client_guard_reservation_ibfk_4` FOREIGN KEY (`location_id`) REFERENCES `location_details` (`location_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `client_guard_reservation_ibfk_5` FOREIGN KEY (`reservation_id`) REFERENCES `guard_reservation` (`reservation_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `client_guard_reservation_ibfk_6` FOREIGN KEY (`client_id`) REFERENCES `client` (`client_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `client_guard_reservation` */
+
+insert  into `client_guard_reservation`(`id`,`client_id`,`reservation_id`,`guard_id`,`location_id`,`duty_shift`,`start_time`,`end_time`,`hours`) values 
+(1,1001,1,8001,23,'morning','08:30:00','20:30:00',12),
+(2,1001,1,8002,23,'morning','08:30:00','20:30:00',12),
+(3,1001,1,8003,23,'morning','08:30:00','20:30:00',12),
+(4,1001,1,8004,23,'morning','08:30:00','20:30:00',12),
+(5,1001,2,8005,24,'morning','11:10:00','21:10:00',10),
+(6,1001,2,8006,24,'morning','11:10:00','21:10:00',10);
 
 /*Table structure for table `client_guard_reservation_history` */
 
@@ -145,23 +153,24 @@ CREATE TABLE `guard` (
   `date` date NOT NULL,
   `experience` varchar(50) NOT NULL,
   `password` varchar(100) DEFAULT NULL,
+  `cost` double DEFAULT NULL,
   PRIMARY KEY (`guard_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=8012 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `guard` */
 
-insert  into `guard`(`guard_id`,`guard_name`,`guard_phone`,`guard_cnic`,`guard_email`,`date`,`experience`,`password`) values 
-(8001,'umar','03012525252','42000','umar@gmail.com','2023-11-14','5','guard'),
-(8002,'shazil','03012525252','42000','umar@gmail.com','2017-11-16','2','guard'),
-(8003,'hasan','03012525252','42000','umar@gmail.com','2020-11-04','5','guard'),
-(8004,'abid','03012525252','42000','umar@gmail.com','2020-11-04','3',NULL),
-(8005,'john','02132523254','42000','umar@gmail.com','2020-11-04','1',NULL),
-(8006,'sahil','02532512541','12546','sahil@gmail.com','2017-11-16','10',NULL),
-(8007,'zahid','45123156485','85698','zahid@gmail.com','2020-11-04','1',NULL),
-(8008,'Ali Haris','03075361147','4200026066521','hk72377@gmail.com','2023-12-15','5',NULL),
-(8009,'Ali Haris','03075361147','4200026066521','hk72377@gmail.com','2023-12-15','5',NULL),
-(8010,'shazil','032562598758','4265854787587','shazil@gmail.com','2023-12-15','5',NULL),
-(8011,'shazil','032562598758','4265854787587','shazil@gmail.com','2023-12-15','5',NULL);
+insert  into `guard`(`guard_id`,`guard_name`,`guard_phone`,`guard_cnic`,`guard_email`,`date`,`experience`,`password`,`cost`) values 
+(8001,'umar','03012525252','42000','umar@gmail.com','2023-11-14','5','guard',130),
+(8002,'shazil','03012525252','42000','umar@gmail.com','2017-11-16','2','guard',120),
+(8003,'hasan','03012525252','42000','umar@gmail.com','2020-11-04','5','guard',120),
+(8004,'abid','03012525252','42000','umar@gmail.com','2020-11-04','3',NULL,120),
+(8005,'john','02132523254','42000','umar@gmail.com','2020-11-04','1',NULL,120),
+(8006,'sahil','02532512541','12546','sahil@gmail.com','2017-11-16','10',NULL,120),
+(8007,'zahid','45123156485','85698','zahid@gmail.com','2020-11-04','1',NULL,120),
+(8008,'Ali Haris','03075361147','4200026066521','hk72377@gmail.com','2023-12-15','5',NULL,120),
+(8009,'Ali Haris','03075361147','4200026066521','hk72377@gmail.com','2023-12-15','5',NULL,120),
+(8010,'shazil','032562598758','4265854787587','shazil@gmail.com','2023-12-15','5',NULL,120),
+(8011,'shazil','032562598758','4265854787587','shazil@gmail.com','2023-12-15','5',NULL,120);
 
 /*Table structure for table `guard_attendance` */
 
@@ -198,9 +207,13 @@ CREATE TABLE `guard_reservation` (
   `payment` tinyint(1) DEFAULT 0,
   `days` int(11) DEFAULT NULL,
   PRIMARY KEY (`reservation_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `guard_reservation` */
+
+insert  into `guard_reservation`(`reservation_id`,`res_datetime`,`start_date`,`end_date`,`schedule_details`,`payment`,`days`) values 
+(1,'2024-02-23 11:49:14','2024-03-01','2024-03-30','extra details',0,29),
+(2,'2024-02-24 11:10:01','2024-03-01','2024-03-09','this is description',0,8);
 
 /*Table structure for table `guard_reservation_history` */
 
@@ -316,14 +329,18 @@ DROP TABLE IF EXISTS `invoice`;
 
 CREATE TABLE `invoice` (
   `invoice_id` int(11) NOT NULL,
-  `reservation_id` int(11) DEFAULT NULL,
+  `client_id` int(11) DEFAULT NULL,
   `datetime` datetime DEFAULT NULL,
+  `total_amount` double DEFAULT NULL,
   PRIMARY KEY (`invoice_id`),
-  KEY `reservation_id` (`reservation_id`),
-  CONSTRAINT `invoice_ibfk_1` FOREIGN KEY (`reservation_id`) REFERENCES `guard_reservation` (`reservation_id`) ON DELETE CASCADE ON UPDATE CASCADE
+  KEY `invoice_ibfk_2` (`client_id`),
+  CONSTRAINT `invoice_ibfk_2` FOREIGN KEY (`client_id`) REFERENCES `client` (`client_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `invoice` */
+
+insert  into `invoice`(`invoice_id`,`client_id`,`datetime`,`total_amount`) values 
+(2147483647,1001,'2024-02-24 13:55:00',189720);
 
 /*Table structure for table `job_application` */
 
@@ -377,7 +394,7 @@ CREATE TABLE `location_details` (
   `latitude` double DEFAULT NULL,
   `longitude` double DEFAULT NULL,
   PRIMARY KEY (`location_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `location_details` */
 
@@ -403,7 +420,9 @@ insert  into `location_details`(`location_id`,`location`,`latitude`,`longitude`)
 (19,'iqra university main campus karachi',NULL,NULL),
 (20,'iqra uni',NULL,NULL),
 (21,'iqra uni',NULL,NULL),
-(22,'Eiffel Tower',NULL,NULL);
+(22,'Eiffel Tower',NULL,NULL),
+(23,'Eiffel Tower',NULL,NULL),
+(24,'Eiffel Tower',NULL,NULL);
 
 /*Table structure for table `schedule` */
 
