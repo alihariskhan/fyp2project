@@ -24,56 +24,13 @@
      <link href="{{ url_for('static', filename='invoice/dashboard.css')}}" rel="stylesheet">
    <link href="{{ url_for('static', filename='invoice/styled.css')}}" rel="stylesheet">
    <link rel="stylesheet" href="{{ url_for('static', filename='invoice/invoice.css')}}">
-<style>body {
-  font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 0;
-}
 
-.login-btn,
-.signup-btn {
-  display: block;
-  width: 100px;
-  padding: 5px;
-  margin: 5px auto;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  color: white;
-  font-size: 12px;
-}
-
-.login-btn {
-  background-color: black;
-}
-
-.signup-btn {
-  background-color: black;
-}
-</style>
 
 </head>
 
 <body class="bg-white">
-   
 
-
-    
-
- <!-- Center Start -->
- <div class="d-flex" id="wrapper">
-        <!-- Sidebar -->
-        
-        <!-- /#sidebar-wrapper -->
-        <!-- Page Content -->
-        <div id="page-content-wrapper">
-            
-
-            <div class="container-fluid px-4">
-
-
-                <div class="row my-5">
-                  <div class="invoice-container" id="invoice-container">
+    <div class="" id="">
                     <div class="header">
                         
                         <h1 style="font-size: 30px;">Invoice</h1>
@@ -136,6 +93,184 @@
                         <p><strong>Total Amount for Reservation ID: {{reservation.reservation_id}}:</strong> {{reservation.total_cost}}</p>
                         {% endfor %}
                         <p><strong>Total Amount: {{total_sum}}:</strong></p>
+                    </div>
+                </div>
+   
+
+
+    
+
+ <!-- Center Start -->
+ <div class="d-flex" id="wrapper">
+        <!-- Sidebar -->
+        
+        <!-- /#sidebar-wrapper -->
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+            
+
+            <div class="container-fluid px-4">
+
+
+                <div class="row my-5">
+                  <div class="invoice-container" id="invoice-container">
+                    <div class="header">
+                        
+                        <h1 style="font-size: 30px;">Invoice</h1>
+
+                    </div>
+                    <div class="container">
+                        <div class="row">
+                    <div class="billing-information col-6 mb-2">
+                        <h2 style="font-size: 20px;">Billing Information</h2>
+                        <p><strong style="color: #292929; font-size: 18px;">Date:</strong> {{date}}</p>
+                        <p><strong style="color: #292929; font-size: 18px;">Invoice Number:</strong>{{invoice_no}}</p>
+                    </div>
+                    <div class="client-details col-6 mb-2">
+                        <h2 style="font-size: 20px;">Client Details</h2>
+                        <p><strong>Client Name:</strong> {{client.client_name}}</p>
+                        <p><strong>Address:</strong> {{client.client_address}}</p>
+                        <p><strong>Phone Number:</strong> {{client.client_phone_no}}</p>
+                        </div>
+                    </div>
+                </div>
+
+                    <div class="invoice-items">
+                        <h2 style="font-size: 20px;">Invoice Items</h2>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Reservations ID</th>
+                                    <th>Guard Quantity</th>
+                                    <th>Cost</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for reservation in reserv %}
+                                <tr>
+                                    <td>{{reservation.reservation_id}}</td>
+                                    <td>{{reservation.guard_count}}</td>
+                                    {% for res in reservations_with_costs %}
+                                    {% if res.reservation_id == reservation.reservation_id %}
+                                        <td>{{ res.total_cost }}</td>
+                                    {% endif %}
+                                    {% endfor %}
+                                </tr>
+                                {% endfor %}
+
+                                <!-- Add more items as needed -->
+                            </tbody>
+                        </table>
+                        
+                    </div>
+                    <div class="total-amount" style="float:right;">
+                        <h7><strong>Total Amount: {{total_sum}}:</strong></h7>
+                    </div>
+
+                    <hr>
+                    <br>
+                    <hr>
+                    <div class="container">
+                        <div class="row">
+                    <div class="billing-information col-6 mb-2">
+                        <h2 style="font-size: 20px;">Billing Information</h2>
+                        <p><strong style="color: #292929; font-size: 18px;">Date:</strong> {{date}}</p>
+                        <p><strong style="color: #292929; font-size: 18px;">Invoice Number:</strong>{{invoice_no}}</p>
+                    </div>
+                    <div class="client-details col-6 mb-2">
+                        <h2 style="font-size: 20px;">Client Details</h2>
+                        <p><strong>Client Name:</strong> {{client.client_name}}</p>
+                        <p><strong>Address:</strong> {{client.client_address}}</p>
+                        <p><strong>Phone Number:</strong> {{client.client_phone_no}}</p>
+                        </div>
+                    </div>
+                </div>
+
+                    <div class="invoice-items">
+                        <h2 style="font-size: 20px;">Invoice Items</h2>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Reservations ID</th>
+                                    <th>Guard Quantity</th>
+                                    <th>Cost</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for reservation in reserv %}
+                                <tr>
+                                    <td>{{reservation.reservation_id}}</td>
+                                    <td>{{reservation.guard_count}}</td>
+                                    {% for res in reservations_with_costs %}
+                                    {% if res.reservation_id == reservation.reservation_id %}
+                                        <td>{{ res.total_cost }}</td>
+                                    {% endif %}
+                                    {% endfor %}
+                                </tr>
+                                {% endfor %}
+
+                                <!-- Add more items as needed -->
+                            </tbody>
+                        </table>
+                        
+                    </div>
+                    <div class="total-amount" style="float:right;">
+                        
+                        <p><strong>Total Amount: {{total_sum}}:</strong></p>
+                    </div>
+
+                    <hr>
+                    <br>
+                    <hr>
+
+                    <div class="container">
+                        <div class="row">
+                    <div class="billing-information col-6 mb-2">
+                        <h2 style="font-size: 20px;">Billing Information</h2>
+                        <p><strong style="color: #292929; font-size: 18px;">Date:</strong> {{date}}</p>
+                        <p><strong style="color: #292929; font-size: 18px;">Invoice Number:</strong>{{invoice_no}}</p>
+                    </div>
+                    <div class="client-details col-6 mb-2">
+                        <h2 style="font-size: 20px;">Client Details</h2>
+                        <p><strong>Client Name:</strong> {{client.client_name}}</p>
+                        <p><strong>Address:</strong> {{client.client_address}}</p>
+                        <p><strong>Phone Number:</strong> {{client.client_phone_no}}</p>
+                        </div>
+                    </div>
+                </div>
+
+                    <div class="invoice-items">
+                        <h2 style="font-size: 20px;">Invoice Items</h2>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Reservations ID</th>
+                                    <th>Guard Quantity</th>
+                                    <th>Cost</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for reservation in reserv %}
+                                <tr>
+                                    <td>{{reservation.reservation_id}}</td>
+                                    <td>{{reservation.guard_count}}</td>
+                                    {% for res in reservations_with_costs %}
+                                    {% if res.reservation_id == reservation.reservation_id %}
+                                        <td>{{ res.total_cost }}</td>
+                                    {% endif %}
+                                    {% endfor %}
+                                </tr>
+                                {% endfor %}
+
+                                <!-- Add more items as needed -->
+                            </tbody>
+                        </table>
+                        
+                    </div>
+                    <div class="total-amount" style="float:right;">
+                        
+                        <p><strong>Total Amount: {{total_sum}}:</strong></p>
+                        <br>
                     </div>
                 </div>
               

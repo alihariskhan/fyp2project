@@ -49,7 +49,7 @@ class Invoice(db.Model):
 
         for reservation in reservation_details:
             # Convert values to numeric types before multiplication
-            cost = [float(c) for c in reservation.cost.split(',')]
+            cost = [float(c) for c in reservation.cost.strip().split(',')]
             hours = float(reservation.hours)
             days = float(reservation.days)
 
