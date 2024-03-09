@@ -24,6 +24,7 @@ from incident_report import Incident_Report
 from interview_call import Interview_call
 from job_application import Job_application, Job_application_History
 from login import Login
+from payslip import Payslip
 from reservations import Reservations
 from set_reservation_details import Set_Reservation_Details
 from setinterviewdate import Call_interviewDate
@@ -34,6 +35,8 @@ from supervisor_register import Supervisor_register
 from rejection_history import Rejection_History
 from Get_location import Get_Location
 from invoice import Invoice
+import guard_attendance
+from client_invoice import Client_Invoice
 
 app = Flask(__name__)
 scheduler = BackgroundScheduler()
@@ -50,6 +53,7 @@ def load_user(user_id):
     admin = Admin.query.get(user_id)
     client = Client.query.get(user_id)
     supervisor = Supervisor.query.get(user_id)
+    guard = Guard.query.get(user_id)
 
     if admin:
         return admin
@@ -57,6 +61,8 @@ def load_user(user_id):
         return client
     elif supervisor:
         return supervisor
+    elif guard:
+        return guard
     else:
         return None
 
@@ -69,6 +75,14 @@ def fetch_dashboard_data(admin_id, admin_name):
         'admin_name': admin_name
     }
     return data
+
+
+# def attendance_data():
+#     result = guard_attendance.copy_data()
+#     return result
+#
+#
+# scheduler.add_job(attendance_data, trigger='cron', day='1', hour='0', minute='0')
 
 
 # def truncate_tables():
@@ -98,14 +112,45 @@ def fetch_dashboard_data(admin_id, admin_name):
 # scheduler.add_job(payment_cancel, 'interval', minutes=5)
 
 
-@app.route('/invoice')
-def invoice():
+@app.route('/payslip')
+@login_required
+def payslip():
+    guard = Guard.query.filter_by(guard_id=current_user.guard_id).first()
+    return render_template('payslip.html', guard=guard)
+
+
+@app.route('/get_attendance_data', methods=['POST', 'GET'])
+@login_required
+def get_attendance_data():
+    obj = Payslip()
+    result = obj.payslip()
+    return result
+
+
+@app.route('/client_list')
+@login_required
+def client_list():
+    lists = Client.query.filter(~Client.client_id.in_(db.session.query(Invoice.client_id))).all()
+    return render_template('invoice_generate.html', lists=lists)
+
+
+@app.route('/client_invoice')
+@login_required
+def client_invoice():
+    obj = Client_Invoice()
+    result = obj.client_invoice()
+    return result
+
+@app.route('/invoice_generate/<string:_id>')
+@login_required
+def invoice(_id):
     obj = Invoice()
-    result = obj.invoice()
+    result = obj.invoice(_id)
     return result
 
 
 @app.route('/get_location', methods=['GET'])
+@login_required
 def get_guard_location():
     obj = Get_Location()
     result = obj.get_location()
@@ -587,6 +632,16 @@ def supervisor_dashboard():
         return "Access Denied!"
 
 
+@app.route('/guard_dashboard')
+@login_required
+def guard_dashboard():
+    guard_id_exist = Guard.query.filter_by(guard_id=current_user.guard_id).first()
+    if guard_id_exist:
+        return render_template('guard_dashboard.html')
+    else:
+        return "Access Denied!"
+
+
 @app.route('/client_dashboard')
 @login_required
 def client_dashboard():
@@ -629,7 +684,6 @@ def admin_dashboard():
 def job_apply():
     obj = Job_application()
     result = obj.Call_job_apply()
-
     return result
 
 

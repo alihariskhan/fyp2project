@@ -47,9 +47,10 @@
 </div>
 
 <!-- Buttons -->
-<button onclick="checkIn()" class="btn btn-primary mr-2">Check-in</button>
-<button onclick="markAbsent()" class="btn btn-warning mr-2">Absent</button>
+<button onclick="checkIn()" class="btn btn-success mr-2">Check-in</button>
 <button onclick="checkOut()" class="btn btn-success">Check-out</button>
+<button onclick="markAbsent()" class="btn btn-danger mr-2">Absent</button>
+<button onclick="markLate()" class="btn btn-warning mr-2">Late</button>
 
 
 
@@ -216,6 +217,24 @@ async function markAbsent() {
 
         console.log(response);
         showAlert("Guard ID: " + guardId + " marked as absent");
+    } catch (error) {
+        console.error('Error:', error);
+    }
+}
+
+// Function to handle absent button click
+async function markLate() {
+    var guardId = document.getElementById("guardId").value;
+
+    try {
+        var response = await $.ajax({
+            type: 'POST',
+            url: '/mark_attendance',
+            data: { guard_id: guardId, action: 'late' }
+        });
+
+        console.log(response);
+        showAlert("Guard ID: " + guardId + " marked as late");
     } catch (error) {
         console.error('Error:', error);
     }

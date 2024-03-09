@@ -10,7 +10,6 @@ from sql import db
 
 class Rejection_History:
 
-
     def truncate(self):
         # Check if it's the 1st date of the month
         today = datetime.now().date()
