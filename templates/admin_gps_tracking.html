@@ -1,0 +1,166 @@
+{% extends "layout.html" %}
+{% block body %}
+    <!-- form css -->
+
+     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <!-- Include Select2 styles -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css">
+    <!-- Include your form CSS -->
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/form_style.css') }}" />
+
+
+
+    <br><br><br><br>
+    <div class="container">
+
+        <a href="/client_dashboard"><button class="btn btn-small btn-round-full btn-green">Dashboard</button></a>
+    
+    <hr>
+        <h2 class="text-white">Live Tracking</h2>
+
+        
+
+        <hr style="background:white;">
+
+        <form method="post" action="/gps_tracking" id="scheduleFormMultiple" >
+            <!-- Responsive Form -->
+            <div class="form-row">
+
+
+                
+                
+                <div class="form-group col-md-6">
+                <label class="text-white" for="incident_guard">Guard at location:</label>
+                    <!-- Add the select2 class to enable the Select2 plugin -->
+                    <select id="incident_guard" name="incident_guard" class="form-control select2">
+                        <option value="null"> Select Guard</option>
+                        {% for guard in guards %}
+                        <option value="{{guard.guard_id}}">{{guard.guard_id}}.. {{guard.guard_name}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+
+                
+            </div>
+        </form>
+
+        <div id="map" style="height: 400px;"></div>
+        <div class="form-group">
+          <h3 class="text-white" id="location_address">Select any Guard</h3>
+        </div>
+        <br><br>
+    </div>
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+
+
+
+   <script>
+    $(document).ready(function () {
+        $('.select2').select2({
+            placeholder: 'Select a guard',
+            allowClear: true,
+            closeOnSelect: true,
+            width: '100%', // Set the width of the dropdown to 100%
+        });
+
+        // Initialize the Leaflet map
+        var map = L.map('map').setView([24.9225346, 67.0003668], 10);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+
+        var guardMarker;
+        var autoUpdate = false;
+        var location_address = document.getElementById("location_address");
+
+        // Listen for changes in the Select2 dropdown
+        $('.select2').on('select2:select', function (e) {
+            // Get the selected guard
+            var selectedGuard = $(this).val();
+
+            // Update the map with the selected guard's location
+            updateGuardLocation(selectedGuard);
+            autoUpdate = true;
+        });
+
+        function updateGuardLocation(selectedGuard) {
+            // If no guard is selected, remove the existing marker and return
+            if (!selectedGuard) {
+                if (guardMarker) {
+                    map.removeLayer(guardMarker);
+                    guardMarker = null;
+                }
+                location_address.textContent = ''; // Clear location address
+                return;
+            }
+
+            fetch('/get_location?guard_id=' + selectedGuard)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Guard location data:', data); // Log the response data
+
+                    // Remove the previous guard marker if exists
+                    if (guardMarker) {
+                        map.removeLayer(guardMarker);
+                        location_address.textContent = ''; // Clear location address
+                    }
+
+
+                    if (data) {
+                        var location = data;
+                        guardMarker = L.marker([location.latitude, location.longitude])
+                            .bindPopup('Guard ID: ' + location.guard_id)
+                            .addTo(map);
+
+                        // Fly to the marker's location
+                        map.flyTo([location.latitude, location.longitude], 18);
+
+                        // Check if location data is available
+                        if (location.location) {
+                            location_address.textContent = 'Duty Location: ' + location.location;
+                        }else {
+                            location_address.textContent = 'Duty Location: Not set'; // Clear checkin time
+                        }
+
+                        console.log('Latitude:', location.latitude, 'Longitude:', location.longitude);
+
+                        
+                        
+
+
+                    }
+                })
+                .catch(error => console.error('Error fetching guard location:', error));
+        }
+
+       setInterval(function () {
+    // Check if auto-update is enabled
+    if (autoUpdate) {
+        var selectedGuard = $('.select2').val();
+        if (selectedGuard !== null && selectedGuard !== "") {
+            updateGuardLocation(selectedGuard);
+        }
+    }
+}, 3000);
+
+
+        });
+
+
+    
+</script>
+
+
+
+
+
+
+
+
+{% endblock %}

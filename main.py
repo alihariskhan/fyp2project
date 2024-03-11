@@ -141,6 +141,7 @@ def client_invoice():
     result = obj.client_invoice()
     return result
 
+
 @app.route('/invoice_generate/<string:_id>')
 @login_required
 def invoice(_id):
@@ -155,6 +156,13 @@ def get_guard_location():
     obj = Get_Location()
     result = obj.get_location()
     return result
+
+
+@app.route("/admin_gps_tracking", methods=['POST', 'GET'])
+@login_required
+def admin_gps_tracking():
+    guards = Guard.query.all()
+    return render_template("admin_gps_tracking.html", guards=guards)
 
 
 @app.route("/gps_tracking", methods=['POST', 'GET'])
