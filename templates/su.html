@@ -1,0 +1,71 @@
+{% extends "layout.html" %}
+{% block body %}
+
+<!-- Header Close -->
+
+<div class="main-wrapper ">
+<section class=" bg-2">
+  
+</section>
+<!-- Section Blog start -->
+<section class="section blog">
+<center><h1 style="color: white;">Security <span style="color: yellow;">Company</span></h1></center>
+
+	<div class="container">
+
+    <!-- Add new post button -->
+    
+
+    
+    
+    <hr>
+
+    <!-- Table fetching post from database -->
+
+		<a href="/admincalled"> <button type="button" class="text-white btn btn-outline-secondary btn-square-md" data-mdb-ripple-color="dark">
+  call for Interview
+</button></a>
+
+<a href="/guardattendance"> <button type="button" class="text-white btn btn-outline-secondary btn-square-md" data-mdb-ripple-color="dark">
+  Guard Attendance
+</button></a>
+
+<a href="/guard_schedule"> <button type="button" class=" text-white btn btn-outline-secondary btn-square-md" data-mdb-ripple-color="dark">
+  Guard Schedule
+</button></a>
+
+<a href="/reservations"> <button type="button" class=" text-white btn btn-outline-secondary btn-square-md" data-mdb-ripple-color="dark">
+  Reservations
+</button></a>
+
+<a href="/show_attendance"> <button type="button" class="text-white btn btn-outline-secondary btn-square-md" data-mdb-ripple-color="dark">
+  Show attendance
+</button></a>
+
+<a href="/incident_report"> <button type="button" class="text-white btn btn-outline-secondary btn-square-md" data-mdb-ripple-color="dark">
+  Report Incident
+</button></a>
+
+<a href="/search_incident_report"> <button type="button" class="text-white btn btn-outline-secondary btn-square-md" data-mdb-ripple-color="dark">
+  Search Incident Report
+</button></a>
+
+<a href="/show_all_incident_report"> <button type="button" class="text-white btn btn-outline-secondary btn-square-md" data-mdb-ripple-color="dark">
+  Show All Report Incident
+</button></a>
+
+<a href="/client_list"> <button type="button" class="text-white btn btn-outline-secondary btn-square-md" data-mdb-ripple-color="dark">
+  Generate invoice
+</button></a>
+
+
+<a href="/logout"><button class="btn btn-small btn-round-full btn-danger">Logout</button></a>
+
+		
+	</div>
+</section>
+<!-- Section Blog End -->
+
+
+
+{% endblock %}

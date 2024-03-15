@@ -1,24 +1,188 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title></title>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp" rel="stylesheet">
+
+    <link rel="stylesheet" href="{{url_for('static',filename='dashboard/style.css')}}" />
+    <!-- Custom styles for this template -->
+  <!-- Custom styles for this template -->
+  <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet" />
+    <title>Client Dashboard</title>
 </head>
+
 <body>
-<h1>client dashboard</h1>
-<a href="/logout"><button>logout</button></a>
+    <div class="d-flex" id="wrapper">
+        <!-- Sidebar -->
+        <div class="bg-white" id="sidebar-wrapper">
+            <div class="sidebar-heading text-center py-4 primary-text fs-4 fw-bold text-uppercase border-bottom"><i
+                    class="fas fa-user-secret me-2"></i>Security<span class="title"> Company</span>
+                </div>
+             <div class="list-group list-group-flush my-3">
+              
+                <a href="/admindashboard" class="list-group-item list-group-item-action bg-transparent second-text active"><i class="fas fa-tachometer-alt me-2"></i>Client Dashboard</a>
 
-<a href="/guard_reservation"><button>Reserve guard</button></a>
+                <a href="/guard_reservation"  class="list-group-item list-group-item-action bg-transparent second-text fw-bold"><i class="fas fa-project-diagram me-2"></i> Reserve Guard</a>
 
-<a href="/my_guard_schedule"><button>Show Guards Schedule</button></a>
+                <a href="#" onclick="loadPage('/my_guard_schedule')" class="list-group-item list-group-item-action bg-transparent second-text fw-bold"><i class="fas fa-project-diagram me-2"></i> Show Guards Schedule</a>
+                <a href="#" onclick="loadPage('/cancel_reservation_page')" class="list-group-item list-group-item-action bg-transparent second-text fw-bold"><i class="fas fa-clock me-2"></i>Cancel Reservation</a>
 
-<a href="/cancel_reservation_page"><button>Cancel Reservation</button></a>
+                <a href="#" onclick="loadPage('/guard_cancel_page')" class="list-group-item list-group-item-action bg-transparent second-text fw-bold"><i class="fas fa-paperclip me-2"></i> Guard Cancel </a>
 
-<a href="/guard_cancel_page"><button>Guard Cancellation</button></a>
+                <a href="/gps_tracking" class="list-group-item list-group-item-action bg-transparent second-text fw-bold"><i class="fas fa-paperclip me-2"></i>Track Guard Location </a>
+                
 
-<a href="/gps_tracking"><button>Track Guard Location</button></a>
+                <a href="#" onclick="loadPage('/client_invoice')" class="list-group-item list-group-item-action bg-transparent second-text fw-bold"><i
+                class="fas fa-calendar-alt me-2"></i>Invoice</a>
 
-<a href="/client_invoice"><button>Generate Invoice</button></a>
+
+                <a href="/logout" class="list-group-item list-group-item-action bg-transparent text-danger fw-bold"><i
+                        class="fas fa-power-off me-2"></i>Logout</a>
+
+
+            </div>
+        </div>
+        <!-- /#sidebar-wrapper -->
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+            <nav class="navbar navbar-expand-lg navbar-light bg-transparent py-4 px-4">
+                <div class="d-flex align-items-center">
+                    <i class="fas fa-align-left primary-text fs-4 me-3" id="menu-toggle"></i>
+                    <h2 class="fs-2 m-0">Dashboard</h2>
+                </div>
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle second-text fw-bold" href="#" id="navbarDropdown"
+                                role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-user me-2"></i>{{data.name}}
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <li><a class="dropdown-item" href="#">Profile</a></li>
+                                <li><a class="dropdown-item" href="#">Settings</a></li>
+                                <li><a class="dropdown-item" href="/logout">Logout</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+            <div class="container-fluid px-4">
+                <div class="row g-3 my-2">
+                    <div class="col-md-3">
+                        <div class="p-3 bg-white shadow-sm d-flex justify-content-around align-items-center rounded">
+                            <div>
+                                <h3 class="fs-2">{{guard_count}}</h3>
+                                <p class="fs-5">Total Guards</p>
+                            </div>
+                            <span class="material-icons-sharp fs-1 secondary-bg rounded-full p-3">face</span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="p-3 bg-white shadow-sm d-flex justify-content-around align-items-center rounded">
+                            <div>
+                                <h3 class="fs-2">{{job_count}}</h3>
+                                <p class="fs-5">Job Requests</p>
+                            </div>
+                            <span class="material-icons-sharp fs-1 secondary-bg rounded-full p-3">person</span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="p-3 bg-white shadow-sm d-flex justify-content-around align-items-center rounded">
+                            <div>
+                                <h3 class="fs-2">{{client_count}}</h3>
+                                <p class="fs-5">Total clients</p>
+                            </div>
+                            <span class="material-icons-sharp fs-1 secondary-bg rounded-full p-3">stacked_bar_chart</span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="p-3 bg-white shadow-sm d-flex justify-content-around align-items-center rounded">
+                            <div>
+                                <h3 class="fs-2">%25</h3>
+                                <p class="fs-5">Increase</p>
+                            </div>
+                            <i class="fas fa-chart-line fs-1 primary-text border rounded-full secondary-bg p-3"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row my-5">
+                    <h3 class="fs-4 mb-3">My Guards</h3>
+                    <div class="col">
+                        <table class="table bg-white rounded shadow-sm  table-hover">
+                            <thead>
+                                <tr>
+                                    <th scope="col">ID</th>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">CNIC</th>
+                                    <th scope="col">Phone No</th>
+                                    <th scope="col">Email</th>
+                                    <th scope="col">Date</th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for request in requests %}
+                                <tr>
+
+                                <td>{{request.applicant_id}}</td>
+                                <td>{{request.candidate_name}}</td>
+                                <td>{{request.candidate_cnic}}</td>
+                                <td>{{request.candidate_phone_no}}</td>
+                                <td>{{request.candidate_email}}</td>
+                                <td>{{request.date}}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- /#page-content-wrapper -->
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        var el = document.getElementById("wrapper");
+        var toggleButton = document.getElementById("menu-toggle");
+
+        toggleButton.onclick = function () {
+            el.classList.toggle("toggled");
+        };
+    </script>
+
+    <script>
+    function loadPage(url) {
+        fetch(url)
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('page-content-wrapper').innerHTML = html;
+            })
+            .catch(error => console.error('Error fetching page:', error));
+    }
+</script>
+
 </body>
+
 </html>

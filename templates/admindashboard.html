@@ -11,6 +11,9 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp" rel="stylesheet">
 
     <link rel="stylesheet" href="{{url_for('static',filename='dashboard/style.css')}}" />
+    <!-- Custom styles for this template -->
+  <!-- Custom styles for this template -->
+  <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet" />
     <title>Admin Dashboard</title>
 </head>
 
@@ -23,33 +26,34 @@
                 </div>
              <div class="list-group list-group-flush my-3">
               
-                <a href="#" class="list-group-item list-group-item-action bg-transparent second-text active"><i
-                        class="fas fa-tachometer-alt me-2"></i>Admin Dashboard</a>
-                <a href="/jobrequests" class="list-group-item list-group-item-action bg-transparent second-text fw-bold"><i class="fas fa-project-diagram me-2"></i>  Job Requests</a>
-                <a href="/reservation_request" class="list-group-item list-group-item-action bg-transparent second-text fw-bold"><i class="fas fa-project-diagram me-2"></i>  Reservation Requests</a>
-                <a href="/interviewtimings" class="list-group-item list-group-item-action bg-transparent second-text fw-bold"><i class="fas fa-clock me-2"></i>Interview Timings</a>
-                <a href="/guardlist" class="list-group-item list-group-item-action bg-transparent second-text fw-bold"><i
-                        class="fas fa-paperclip me-2"></i> Guard List </a>
+                <a href="/admindashboard" class="list-group-item list-group-item-action bg-transparent second-text active"><i class="fas fa-tachometer-alt me-2"></i>Admin Dashboard</a>
+
+                <a href="#" onclick="loadPage('/jobrequests')" class="list-group-item list-group-item-action bg-transparent second-text fw-bold"><i class="fas fa-project-diagram me-2"></i>  Job Requests</a>
+
+                <a href="#" onclick="loadPage('/reservation_request')" class="list-group-item list-group-item-action bg-transparent second-text fw-bold"><i class="fas fa-project-diagram me-2"></i>  Reservation Requests</a>
+                <a href="#" onclick="loadPage('/interviewtimings')" class="list-group-item list-group-item-action bg-transparent second-text fw-bold"><i class="fas fa-clock me-2"></i>Interview Timings</a>
+
+                <a href="#" onclick="loadPage('/guardlist')" class="list-group-item list-group-item-action bg-transparent second-text fw-bold"><i class="fas fa-paperclip me-2"></i> Guard List </a>
+
                 <a href="#" class="list-group-item list-group-item-action bg-transparent second-text fw-bold"><i
                         class="fas fa-paperclip me-2"></i>Reserved Guard </a>
                 <a href="#" class="list-group-item list-group-item-action bg-transparent second-text fw-bold"><i
                         class="fas fa-calendar-alt me-2"></i>Guard Attendance</a>
-                <a href="/admin_gps_tracking" class="list-group-item list-group-item-action bg-transparent second-text fw-bold"><i
-                        class="fas fa-eye me-2"></i>GPS Tracking</a>
+                <a href="/admin_gps_tracking" class="list-group-item list-group-item-action bg-transparent second-text fw-bold"><i class="fas fa-eye me-2"></i>GPS Tracking</a>
 
                         <!-- <a href="/admin/register" class="list-group-item list-group-item-action bg-transparent second-text fw-bold"><i
                         class="fas fa-calendar-alt me-2"></i>Register Admin</a> -->
 
-                        <a href="/rejection_history" class="list-group-item list-group-item-action bg-transparent second-text fw-bold"><i
+                        <a href="#" onclick="loadPage('/rejection_history')" class="list-group-item list-group-item-action bg-transparent second-text fw-bold"><i
                         class="fas fa-calendar-alt me-2"></i>Rejection History</a>
 
                             <!-- <a href="/admin/unregister" class="list-group-item list-group-item-action bg-transparent second-text fw-bold"><i
                         class="fas fa-calendar-alt me-2"></i>Unregister Admin</a> -->
 
-                <a href="/supervisor/register" class="list-group-item list-group-item-action bg-transparent second-text fw-bold"><i
+                <a href="#" onclick="loadPage('/supervisor/register')" class="list-group-item list-group-item-action bg-transparent second-text fw-bold"><i
                         class="fas fa-calendar-alt me-2"></i>Register Supervisor</a>
 
-                        <a href="/supervisor/unregister" class="list-group-item list-group-item-action bg-transparent second-text fw-bold"><i
+                        <a href="#" onclick="loadPage('/supervisor/unregister')" class="list-group-item list-group-item-action bg-transparent second-text fw-bold"><i
                         class="fas fa-calendar-alt me-2"></i>Unregister Supervisor</a>
 
 
@@ -82,7 +86,7 @@
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle second-text fw-bold" href="#" id="navbarDropdown"
                                 role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="fas fa-user me-2"></i>{{data.admin_name}}
+                                <i class="fas fa-user me-2"></i>{{data.name}}
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 <li><a class="dropdown-item" href="#">Profile</a></li>
@@ -184,6 +188,18 @@
             el.classList.toggle("toggled");
         };
     </script>
+
+    <script>
+    function loadPage(url) {
+        fetch(url)
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('page-content-wrapper').innerHTML = html;
+            })
+            .catch(error => console.error('Error fetching page:', error));
+    }
+</script>
+
 </body>
 
 </html>

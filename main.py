@@ -71,8 +71,8 @@ def fetch_dashboard_data(admin_id, admin_name):
     # Assuming you have some data fetching logic based on the client_id
     # Replace this with your actual data fetching logic
     data = {
-        'admin_id': admin_id,
-        'admin_name': admin_name
+        '_id': admin_id,
+        'name': admin_name
     }
     return data
 
@@ -635,7 +635,8 @@ def job_requests():
 def supervisor_dashboard():
     supervisor_id_exist = Supervisor.query.filter_by(supervisor_id=current_user.supervisor_id).first()
     if supervisor_id_exist:
-        return render_template("supervisordashboard.html")
+        data = fetch_dashboard_data(current_user.supervisor_id, current_user.supervisor_name)
+        return render_template("supervisordashboard.html", data=data)
     else:
         return "Access Denied!"
 
@@ -655,7 +656,8 @@ def guard_dashboard():
 def client_dashboard():
     client_id_exist = Client.query.filter_by(client_id=current_user.client_id).first()
     if client_id_exist:
-        return render_template('client_dashboard.html')
+        data = fetch_dashboard_data(current_user.client_id, current_user.client_name)
+        return render_template('client_dashboard.html', data=data)
     else:
         return "Access Denied!"
 
