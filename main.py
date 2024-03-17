@@ -37,6 +37,7 @@ from Get_location import Get_Location
 from invoice import Invoice
 import guard_attendance
 from client_invoice import Client_Invoice
+from signup import Signup
 
 app = Flask(__name__)
 scheduler = BackgroundScheduler()
@@ -703,6 +704,14 @@ def admin_dashboard():
                                data=data, client_count=client_count)
     else:
         return "Access Denied!"
+
+
+# Route to signup
+@app.route('/signup', methods=['POST','GET'])
+def signup():
+    obj = Signup()
+    result = obj.sign_up()
+    return result
 
 
 # Route to apply for job

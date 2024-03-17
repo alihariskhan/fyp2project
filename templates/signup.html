@@ -1,0 +1,72 @@
+{% extends "navbar.html" %}
+{% block body %}
+<!-- form css -->
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/form_style.css') }}" />
+<br><br><br><br><br>
+<div class="login-box">
+  <h2>Sign up</h2>
+  <form method="post" action="/signup">
+    <div class="user-box" style="position: relative;">
+      <input  type="string" name="name" required>
+      <label>Name</label>
+    </div>
+    <div class="user-box" style="position: relative;">
+  <input type="string" name="cnic" pattern="[0-9]{14}" title="Please enter a valid CNIC (14 digits)" required>
+  <label>CNIC</label>
+</div>
+
+
+    <div class="user-box">
+      <input type="text" name="address" required>
+      <label>Address</label>
+    </div>
+
+    <div class="user-box">
+      <input type="number" name="phone_no" pattern="[0-9]{11}" title="Please enter a valid Phone no (11 digits)" required>
+      <label>Phone No</label>
+    </div>
+
+    <div class="user-box">
+      <input type="password" id="password" name="password" required>
+      <label>Password</label>
+    </div>
+
+    <div class="user-box">
+      <input type="password" id="re_password" name="re_password" required>
+      <label>Re Enter Password</label>
+    </div>
+    <button class="btn btn-small btn-round-full btn-green" type="submit" value="submit">
+      Sign Up
+    </button>
+    
+  </form>
+
+  {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <ul class="flashes">
+                {% for message in messages %}
+                    <li style="color:red;">{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+
+<script>
+    var password = document.getElementById("password"),
+      re_password = document.getElementById("re_password");
+
+    function validatePassword() {
+      if (password.value != re_password.value) {
+        re_password.setCustomValidity("Passwords do not match");
+      } else {
+        re_password.setCustomValidity('');
+      }
+    }
+
+    password.onchange = validatePassword;
+    re_password.onkeyup = validatePassword;
+  </script>
+  
+</div>
+
+{% endblock %}
