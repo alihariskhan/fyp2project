@@ -636,7 +636,15 @@ def supervisor_dashboard():
     supervisor_id_exist = Supervisor.query.filter_by(supervisor_id=current_user.supervisor_id).first()
     if supervisor_id_exist:
         data = fetch_dashboard_data(current_user.supervisor_id, current_user.supervisor_name)
-        return render_template("supervisordashboard.html", data=data)
+        count = (Job_application.query.filter(Job_application.interview_request == True)
+                 .filter(~Job_application.applicant_id.in_(db.session.query(Interview.applicant_id)))
+                 .count())
+        guards = Guard.query.filter(Guard.guard_id.in_(db.session.query(Client_Guard_Reservation.guard_id))).count()
+        requests = (Job_application.query.filter(Job_application.interview_request == True)
+                 .filter(~Job_application.applicant_id.in_(db.session.query(Interview.applicant_id)))
+                 .all())
+        return render_template("supervisordashboard.html", data=data, count=count, guards=guards,
+                               requests=requests)
     else:
         return "Access Denied!"
 
@@ -657,7 +665,15 @@ def client_dashboard():
     client_id_exist = Client.query.filter_by(client_id=current_user.client_id).first()
     if client_id_exist:
         data = fetch_dashboard_data(current_user.client_id, current_user.client_name)
-        return render_template('client_dashboard.html', data=data)
+        guards = (db.session.query(Client_Guard_Reservation, Client, Guard).select_from(Client_Guard_Reservation)
+                  .join(Client, Client_Guard_Reservation.client_id == Client.client_id)
+                  .join(Guard, Client_Guard_Reservation.guard_id == Guard.guard_id)
+                  .filter(Client.client_id == current_user.client_id).all())
+        count = (db.session.query(Client_Guard_Reservation, Client, Guard).select_from(Client_Guard_Reservation)
+                 .join(Client, Client_Guard_Reservation.client_id == Client.client_id)
+                 .join(Guard, Client_Guard_Reservation.guard_id == Guard.guard_id)
+                 .filter(Client.client_id == current_user.client_id).count())
+        return render_template('client_dashboard.html', data=data, guards=guards, count=count)
     else:
         return "Access Denied!"
 

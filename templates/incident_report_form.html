@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 {% block body %}
-    <!-- form css -->
+    a<!-- form css -->
 
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/form_style.css') }}" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css">
@@ -38,7 +38,7 @@
                 <div class="form-group col-md-6">
                 <label class="text-white" for="incident_guard">Guard at location:</label>
                     <!-- Add the select2 class to enable the Select2 plugin -->
-                    <select id="incident_guard" name="incident_guard" class="form-control select2" multiple>
+                    <select  id="incident_guard" name="incident_guard" class="form-control select2" multiple >
                         {% for guard in guards %}
                         <option value="{{guard.guard_id}}">{{guard.guard_id}}.. {{guard.guard_name}}</option>
                         {% endfor %}
@@ -92,6 +92,8 @@
             closeOnSelect: false, // Keep the dropdown open after selection
             // Add other options as needed
         });
+        // Clear the initially selected value
+    $('.select3').val(null).trigger('change');
     });
 </script>
 

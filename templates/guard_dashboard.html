@@ -1,13 +1,38 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title></title>
-</head>
-<body>
-<h1>Guard Dashboard</h1>
-<a href="/logout"><button> Logout</button></a>
-<a href="/payslip"><button> payslip</button></a>
-</body>
-</html>
+{% extends "layout.html" %}
+{% block body %}
+
+<!-- Header Close -->
+
+<div class="main-wrapper ">
+<section class=" bg-2">
+  
+</section>
+<!-- Section Blog start -->
+<section class="section blog">
+<center><h1 style="color: white;">SecureGuard <span style="color: yellow;">Hub</span></h1></center>
+
+	<div class="container">
+
+    <!-- Add new post button -->
+    
+
+    
+    
+    <hr>
+
+    <!-- Table fetching post from database -->
+<center>
+		<a href="/payslip"> <button type="button" class="text-white btn btn-outline-secondary btn-square-md" data-mdb-ripple-color="dark">
+  Payslip
+</button></a>
+
+<a href="/logout"><button class="btn btn-small btn-round-full btn-danger">Logout</button></a>
+</center>
+		
+	</div>
+</section>
+<!-- Section Blog End -->
+
+
+
+{% endblock %}

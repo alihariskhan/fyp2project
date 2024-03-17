@@ -11,13 +11,15 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.min.css') }}" />
   <link rel="shortcut icon" href="{{ url_for('static', filename='img/favicon.png') }}" type="image/x-icon">
 
-  <title>Guarder</title>
+  <title>SecureGuard Hub</title>
 
   <!-- bootstrap core css -->
   <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.css') }}" />
 
   <!-- fonts style -->
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700|Poppins:400,600,700&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Sharp:opsz,wght,FILL,GRAD@24,400,0,0" />
 
   <!-- Custom styles for this template -->
   <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet" />
@@ -40,21 +42,23 @@
         <div class="container-fluid">
           <div class="contact_link-container">
             <a href="" class="contact_link1">
-              <i class="fa fa-map-marker" aria-hidden="true"></i>
+              <span class="material-symbols-sharp" aria-hidden="true">location_on</span>
               <span>
-                Lorem ipsum dolor sit amet,
+                Shahra-e-Faisal Karachi.
               </span>
+
+
             </a>
             <a href="" class="contact_link2">
-              <i class="fa fa-phone" aria-hidden="true"></i>
+              <span class="material-symbols-sharp">call</span>
               <span>
-                Call : +01 1234567890
+                Call : +9231223456789
               </span>
             </a>
             <a href="" class="contact_link3">
-              <i class="fa fa-envelope" aria-hidden="true"></i>
+              <span class="material-symbols-sharp">mail</span>
               <span>
-                demo@gmail.com
+                secureguard@gmail.com
               </span>
             </a>
           </div>
@@ -65,7 +69,7 @@
           <nav class="navbar navbar-expand-lg custom_nav-container">
             <a class="navbar-brand" href="index.html">
               <span>
-                Guarder
+                SecureGuard Hub
               </span>
             </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">

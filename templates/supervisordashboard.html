@@ -26,7 +26,7 @@
                 </div>
              <div class="list-group list-group-flush my-3">
               
-                <a href="/admindashboard" class="list-group-item list-group-item-action bg-transparent second-text active"><i class="fas fa-tachometer-alt me-2"></i>Supervisor Dashboard</a>
+                <a href="/supervisordashboard" class="list-group-item list-group-item-action bg-transparent second-text active"><i class="fas fa-tachometer-alt me-2"></i>Supervisor Dashboard</a>
 
                 <a href="#" onclick="loadPage('/admincalled')"  class="list-group-item list-group-item-action bg-transparent second-text fw-bold"><i class="fas fa-project-diagram me-2"></i> Call for Interview</a>
 
@@ -36,10 +36,10 @@
 
                 <a href="#" onclick="loadPage('/reservations')" class="list-group-item list-group-item-action bg-transparent second-text fw-bold"><i class="fas fa-paperclip me-2"></i> Reservations </a>
 
-                <a href="/show_attendance" class="list-group-item list-group-item-action bg-transparent second-text fw-bold"><i class="fas fa-paperclip me-2"></i>Show attendance </a>
+                <a onclick="loadPage('/show_attendance')" class="list-group-item list-group-item-action bg-transparent second-text fw-bold"><i class="fas fa-paperclip me-2"></i>Show attendance </a>
                 
 
-                <a href="#" onclick="loadPage('/incident_report')" class="list-group-item list-group-item-action bg-transparent second-text fw-bold"><i
+                <a href="/incident_report" class="list-group-item list-group-item-action bg-transparent second-text fw-bold"><i
                 class="fas fa-calendar-alt me-2"></i>Report Incident</a>
 
                 <a href="#" onclick="loadPage('/search_incident_report')" class="list-group-item list-group-item-action bg-transparent second-text fw-bold"><i
@@ -96,8 +96,8 @@
                     <div class="col-md-3">
                         <div class="p-3 bg-white shadow-sm d-flex justify-content-around align-items-center rounded">
                             <div>
-                                <h3 class="fs-2">{{guard_count}}</h3>
-                                <p class="fs-5">Total Guards</p>
+                                <h3 class="fs-2">3</h3>
+                                <p class="fs-5">Last month Incidents</p>
                             </div>
                             <span class="material-icons-sharp fs-1 secondary-bg rounded-full p-3">face</span>
                         </div>
@@ -106,8 +106,8 @@
                     <div class="col-md-3">
                         <div class="p-3 bg-white shadow-sm d-flex justify-content-around align-items-center rounded">
                             <div>
-                                <h3 class="fs-2">{{job_count}}</h3>
-                                <p class="fs-5">Job Requests</p>
+                                <h3 class="fs-2">{{count}}</h3>
+                                <p class="fs-5">Call for<br> Interview</p>
                             </div>
                             <span class="material-icons-sharp fs-1 secondary-bg rounded-full p-3">person</span>
                         </div>
@@ -116,14 +116,14 @@
                     <div class="col-md-3">
                         <div class="p-3 bg-white shadow-sm d-flex justify-content-around align-items-center rounded">
                             <div>
-                                <h3 class="fs-2">{{client_count}}</h3>
-                                <p class="fs-5">Total clients</p>
+                                <h3 class="fs-2">{{guards}}</h3>
+                                <p class="fs-5">Guards<br> Reserved</p>
                             </div>
                             <span class="material-icons-sharp fs-1 secondary-bg rounded-full p-3">stacked_bar_chart</span>
                         </div>
                     </div>
 
-                    <div class="col-md-3">
+                   <!--  <div class="col-md-3">
                         <div class="p-3 bg-white shadow-sm d-flex justify-content-around align-items-center rounded">
                             <div>
                                 <h3 class="fs-2">%25</h3>
@@ -131,11 +131,11 @@
                             </div>
                             <i class="fas fa-chart-line fs-1 primary-text border rounded-full secondary-bg p-3"></i>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
 
                 <div class="row my-5">
-                    <h3 class="fs-4 mb-3">My Guards</h3>
+                    <h3 class="fs-4 mb-3">Call For Interview</h3>
                     <div class="col">
                         <table class="table bg-white rounded shadow-sm  table-hover">
                             <thead>

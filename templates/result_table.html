@@ -37,6 +37,7 @@
                 <tr>
                     <th>Date</th>
                     <th>Check-in Time</th>
+                    <th>Check-out Time</th>
                     
                 </tr>
             </thead>
@@ -45,6 +46,7 @@
                     <tr>
                         <td>{{ attendance.checkin_time.date() }}</td>
                         <td>{{ attendance.checkin_time.time() }}</td>
+                        <td>{{ attendance.checkout_time.time() }}</td>
                         <!-- Add more columns as needed -->
                     </tr>
                 {% endfor %}

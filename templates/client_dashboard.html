@@ -26,7 +26,7 @@
                 </div>
              <div class="list-group list-group-flush my-3">
               
-                <a href="/admindashboard" class="list-group-item list-group-item-action bg-transparent second-text active"><i class="fas fa-tachometer-alt me-2"></i>Client Dashboard</a>
+                <a href="/client_dashboard" class="list-group-item list-group-item-action bg-transparent second-text active"><i class="fas fa-tachometer-alt me-2"></i>Client Dashboard</a>
 
                 <a href="/guard_reservation"  class="list-group-item list-group-item-action bg-transparent second-text fw-bold"><i class="fas fa-project-diagram me-2"></i> Reserve Guard</a>
 
@@ -86,7 +86,7 @@
                     <div class="col-md-3">
                         <div class="p-3 bg-white shadow-sm d-flex justify-content-around align-items-center rounded">
                             <div>
-                                <h3 class="fs-2">{{guard_count}}</h3>
+                                <h3 class="fs-2">{{count}}</h3>
                                 <p class="fs-5">Total Guards</p>
                             </div>
                             <span class="material-icons-sharp fs-1 secondary-bg rounded-full p-3">face</span>
@@ -96,8 +96,8 @@
                     <div class="col-md-3">
                         <div class="p-3 bg-white shadow-sm d-flex justify-content-around align-items-center rounded">
                             <div>
-                                <h3 class="fs-2">{{job_count}}</h3>
-                                <p class="fs-5">Job Requests</p>
+                                <h3 class="fs-2">2</h3>
+                                <p class="fs-5">Total Reservations</p>
                             </div>
                             <span class="material-icons-sharp fs-1 secondary-bg rounded-full p-3">person</span>
                         </div>
@@ -106,14 +106,14 @@
                     <div class="col-md-3">
                         <div class="p-3 bg-white shadow-sm d-flex justify-content-around align-items-center rounded">
                             <div>
-                                <h3 class="fs-2">{{client_count}}</h3>
-                                <p class="fs-5">Total clients</p>
+                                <h3 class="fs-2">Invoice</h3>
+                                <p class="fs-5">Pending</p>
                             </div>
                             <span class="material-icons-sharp fs-1 secondary-bg rounded-full p-3">stacked_bar_chart</span>
                         </div>
                     </div>
 
-                    <div class="col-md-3">
+                    <!-- <div class="col-md-3">
                         <div class="p-3 bg-white shadow-sm d-flex justify-content-around align-items-center rounded">
                             <div>
                                 <h3 class="fs-2">%25</h3>
@@ -121,7 +121,7 @@
                             </div>
                             <i class="fas fa-chart-line fs-1 primary-text border rounded-full secondary-bg p-3"></i>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
 
                 <div class="row my-5">
@@ -135,20 +135,20 @@
                                     <th scope="col">CNIC</th>
                                     <th scope="col">Phone No</th>
                                     <th scope="col">Email</th>
-                                    <th scope="col">Date</th>
+                                    
 
                                 </tr>
                             </thead>
                             <tbody>
-                                {% for request in requests %}
+                                {% for client_guard, client, guard in guards %}
                                 <tr>
 
-                                <td>{{request.applicant_id}}</td>
-                                <td>{{request.candidate_name}}</td>
-                                <td>{{request.candidate_cnic}}</td>
-                                <td>{{request.candidate_phone_no}}</td>
-                                <td>{{request.candidate_email}}</td>
-                                <td>{{request.date}}</td>
+                                <td>{{guard.guard_id}}</td>
+                                <td>{{guard.guard_name}}</td>
+                                <td>{{guard.guard_cnic}}</td>
+                                <td>{{guard.guard_phone}}</td>
+                                <td>{{guard.guard_email}}</td>
+                                
                                     </tr>
                                 {% endfor %}
                             </tbody>
