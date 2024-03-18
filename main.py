@@ -670,11 +670,20 @@ def client_dashboard():
                   .join(Client, Client_Guard_Reservation.client_id == Client.client_id)
                   .join(Guard, Client_Guard_Reservation.guard_id == Guard.guard_id)
                   .filter(Client.client_id == current_user.client_id).all())
+
         count = (db.session.query(Client_Guard_Reservation, Client, Guard).select_from(Client_Guard_Reservation)
                  .join(Client, Client_Guard_Reservation.client_id == Client.client_id)
                  .join(Guard, Client_Guard_Reservation.guard_id == Guard.guard_id)
                  .filter(Client.client_id == current_user.client_id).count())
-        return render_template('client_dashboard.html', data=data, guards=guards, count=count)
+
+        reservations = (db.session.query(Client_Guard_Reservation, Guard_reservation)
+                        .select_from(Client_Guard_Reservation)
+                        .join(Guard_reservation, Client_Guard_Reservation.reservation_id == Guard_reservation.reservation_id)
+                        .filter(Client_Guard_Reservation.client_id == current_user.client_id)
+                        .group_by(Client_Guard_Reservation.reservation_id)
+                        .count())
+        return render_template('client_dashboard.html', data=data, guards=guards, count=count,
+                               reservations=reservations)
     else:
         return "Access Denied!"
 
